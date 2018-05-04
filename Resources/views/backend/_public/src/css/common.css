@@ -1,0 +1,176 @@
+/*{literal}*/
+
+/* Common */
+html {
+    box-sizing: border-box;
+    font-family: Arial, Verdana, sans-serif;
+    color: #1d5987;
+
+    padding: 20px;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+fieldset {
+    margin: 10px 0;
+}
+
+label {
+    width: 300px;
+    display: inline-block
+}
+
+label + div,
+label + a {
+    width: calc(100% - 305px);
+    min-width: 400px;
+    display: inline-block;
+    word-break: break-all;
+    margin-bottom: 5px;
+}
+
+progress {
+    display: block;
+    width: 100%;
+    margin: 10px 0 2px 0
+}
+
+.diffInserted,
+.green {
+    background-color: greenyellow;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.diffDeleted,
+.red {
+    background-color: lightpink;
+}
+
+.button-right-wrapper {
+    text-align: right;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.two-cols {
+    float: left;
+    width: 49%;
+}
+
+.two-cols:last-child {
+    float: right;
+}
+
+.three-cols {
+    float: left;
+    width: 33%;
+}
+
+.three-cols label {
+    width: 40%;
+}
+
+/* Jquery UI Anpassungen */
+.ui-widget {
+    font-size: 12px;
+}
+
+.ui-widget-content {
+    background: none;
+    background-color: #F4F4F4 !important;
+}
+
+button.ui-button {
+    border-radius: 4px;
+
+    font-size: 14px !important;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+button.ui-button:not(.ui-state-active) {
+    background: linear-gradient(#AAAAAA, #888888);
+}
+
+button.ui-button:hover {
+    border-color: #E1E1E1;
+    background: linear-gradient(#E1E1E1, #AAAAAA);
+}
+
+button.ui-button.red {
+    background: linear-gradient(#CC0000, #880000);
+
+    color: #ffffff;
+}
+
+button.ui-button.red:hover {
+    border-color: #FF0000;
+    background: linear-gradient(#FF0000, #BB0000);
+}
+
+button.ui-button.blue {
+    background: linear-gradient(#1177AA, #004477);
+    color: #ffffff;
+}
+
+button.ui-button.blue:hover {
+    background: linear-gradient(#46AFE1, #1177AA);
+}
+
+.ui-selectmenu-button,
+input[type='text']{
+    height: 28px;
+}
+
+input[type='text'] {
+    border: none;
+    padding: .4em 1em;
+}
+
+textarea {
+    width: 40%;
+    height: 220px;
+    padding: .4em 1em;
+}
+
+.ui-dialog-titlebar-close .ui-button-icon {
+    background-color: #FFFFFF;
+}
+
+/* Errors */
+.alerts .ui-state-highlight,
+.alerts .ui-state-error {
+    padding: 10px;
+    display: none;
+}
+
+.alerts .ui-icon {
+    float: left;
+    margin-top: 0px;
+    margin-right: 10px;
+}
+
+.alerts .content {
+    display: inline;
+}
+
+/* BORDER COLOR */
+.bordered {
+    border: 1px solid #000;
+    padding: 15px;
+}
+
+.bordered,
+#action-field #options-form,
+.ui-widget-content {
+    border-color: #46AFE1;
+}
+
+/*{/literal}*/

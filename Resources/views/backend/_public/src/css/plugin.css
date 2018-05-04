@@ -1,0 +1,38 @@
+/*{literal}*/
+
+.mail-body {
+    background-color: #FFFFFF;
+
+    float: right;
+    width: 50%;
+}
+
+.mail-attributes {
+    float: left;
+    width: 50%;
+}
+
+label {
+    width:100%;
+    font-weight: 700;
+    margin: 10px 0 2px 0;
+}
+
+#back-button {
+    float: left;
+}
+
+#mail-conent,
+.ui-selectmenu-button,
+input[type='text'] {
+    width: 100% !important;
+}
+
+#subject-input {
+    width: 39%;
+}
+
+#send-mail-button {
+    margin-bottom: 30px;
+}
+/*{/literal}*/

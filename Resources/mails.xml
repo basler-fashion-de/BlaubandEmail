@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <mails>
+        <name>blaubandMail</name>
+        <fromMail>{$mailFrom}</fromMail>
+        <fromName>{$mailFrom}</fromName>
+        <subject>{$mailSubject}</subject>
+        <htmlContent>
+{include file="string:{config name=emailheaderplain}"}
+{$mailContent}
+{include file="string:{config name=emailfooterplain}"}
+        </htmlContent>
+        <plainContent>
+{include file="string:{config name=emailheaderplain}"}
+{$mailContent}
+{include file="string:{config name=emailfooterplain}"}
+        </plainContent>
+        <isHtml>false</isHtml>
+    </mails>
+</config>

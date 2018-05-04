@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+
+    <elements>
+        <element required="true" type="text" scope="shop">
+            <name>SUBJECT_TEMPLATE</name>
+            <label lang="de">Betreff Text</label>
+            <label lang="en">Subject text</label>
+            <value>Nachricht von {$shopName}{if $order.ordernumber} (Bestell Nummer: {$order.ordernumber}){/if}</value>
+        </element>
+
+        <element required="true" type="textarea" scope="shop">
+            <name>CONTENT_TEMPLATE</name>
+            <label lang="de">Inhalts Text</label>
+            <label lang="en">Content text</label>
+            <value>Hallo {$customer.firstname} {$customer.lastname},</value>
+        </element>
+    </elements>
+</config>
