@@ -34,33 +34,37 @@ class Mail implements SubscriberInterface
      */
     public function onMailSend(\Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_Components_Mail $mail */
-        $mail = $args->get('mail');
+        try{
+            /** @var \Enlight_Components_Mail $mail */
+            $mail = $args->get('mail');
 
-        $mailModel = new LoggedMail();
-        $mailModel->setSubject($mail->getSubject());
-        $mailModel->setFrom($mail->getFrom());
-        $mailModel->setTo(implode(', ', $mail->getTo()));
+            $mailModel = new LoggedMail();
+            $mailModel->setSubject($mail->getSubject());
+            $mailModel->setFrom($mail->getFrom());
+            $mailModel->setTo(implode(', ', $mail->getTo()));
 
-        if (strlen($mail->getPlainBody()) === 0) {
-            $mailModel->setBody($mail->getPlainBodyText());
-            $mailModel->setIsHtml(false);
-        } else {
-            $mailModel->setBody($mail->getPlainBody());
-            $mailModel->setIsHtml(true);
-        }
-
-        if(isset($_POST['orderId'])){
-            $order = $this->modelManager->find(Order::class, $_POST['orderId']);
-
-            if(!empty($order)){
-                $mailModel->setOrder($order);
-                $mailModel->setCustomer($order->getCustomer());
+            if (strlen($mail->getPlainBody()) === 0) {
+                $mailModel->setBody($mail->getPlainBodyText());
+                $mailModel->setIsHtml(false);
+            } else {
+                $mailModel->setBody($mail->getPlainBody());
+                $mailModel->setIsHtml(true);
             }
-        }
 
-        $this->modelManager->persist($mailModel);
-        $this->modelManager->flush($mailModel);
+            if(isset($_POST['orderId'])){
+                $order = $this->modelManager->find(Order::class, $_POST['orderId']);
+
+                if(!empty($order)){
+                    $mailModel->setOrder($order);
+                    $mailModel->setCustomer($order->getCustomer());
+                }
+            }
+
+            $this->modelManager->persist($mailModel);
+            $this->modelManager->flush($mailModel);
+        }catch (\Exception $e){
+            //Do nothing
+        }
     }
 
 }
