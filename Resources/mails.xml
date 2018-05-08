@@ -7,12 +7,12 @@
         <subject>{$mailSubject}</subject>
         <htmlContent>
 {include file="string:{config name=emailheaderplain}"}
-{$mailContent}
+{$mailContent|trim}
 {include file="string:{config name=emailfooterplain}"}
         </htmlContent>
         <plainContent>
 {include file="string:{config name=emailheaderplain}"}
-{$mailContent}
+{$mailContent|trim}
 {include file="string:{config name=emailfooterplain}"}
         </plainContent>
         <isHtml>false</isHtml>

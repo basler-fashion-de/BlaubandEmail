@@ -25,6 +25,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         /** @var ModelManager $modelManager */
         $modelManager = $this->container->get('models');
 
+        $isOwnFrame = $this->request->getParam('frame') === '1';
+
         $customerId = $this->request->getParam('customerId');
         $orderId = $this->request->getParam('orderId');
 
@@ -38,17 +40,18 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $criteria = [];
         $orderBy = ['createDate' => 'DESC'];
 
-        if($customerId){
+        if ($customerId) {
             $criteria['customerId'] = $customerId;
         }
 
-        if($orderId){
+        if ($orderId) {
             $criteria['orderId'] = $orderId;
         }
 
         $allMails = $repository->findBy($criteria, $orderBy, $limit, $offset);
         $total = $repository->findBy($criteria);
 
+        $this->view->assign('isOwnFrame', $isOwnFrame);
         $this->view->assign('customerId', $customerId);
         $this->view->assign('orderId', $orderId);
         $this->view->assign('mails', $allMails);
@@ -119,6 +122,14 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $subjectTemplate = $pluginConfig['SUBJECT_TEMPLATE'];
         $content = $stringCompiler->compileString($subjectTemplate, $templateContext);
         $this->view->assign('subjectContent', $content);
+
+        $footer = $config->get('emailfooterplain');
+        $content = $stringCompiler->compileString($footer, $templateContext);
+        $this->view->assign('footer', $content);
+
+        $header = $config->get('emailheaderplain');
+        $content = $stringCompiler->compileString($header, $templateContext);
+        $this->view->assign('header', $content);
     }
 
     public function executeSendAction()
@@ -132,8 +143,15 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
             $to = $this->request->getParam('mailTo');
 
+            if (!empty($this->request->getParam('mailToBcc'))) {
+                $bcc = $this->request->getParam('mailToBcc');
+            }else{
+                $bcc = '';
+            }
+
             $mail = $templateMail->createMail("blaubandMail", $this->request->getParams());
             $mail->addTo($to);
+            $mail->addBcc($bcc);
             $mail->send();
 
             if ($this->request->getParam('orderId')) {

@@ -28,13 +28,19 @@ class LoggedMail extends ModelEntity
      */
     private $from;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="to_mail", type="string")
      */
     private $to;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bcc_mail", type="string")
+     */
+    private $bcc;
 
     /**
      * @var string
@@ -170,6 +176,22 @@ class LoggedMail extends ModelEntity
     public function setTo(string $to)
     {
         $this->to = $to;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param string $bcc
+     */
+    public function setBcc(string $bcc)
+    {
+        $this->bcc = $bcc;
     }
 
     /**

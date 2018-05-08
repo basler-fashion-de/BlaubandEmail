@@ -1,8 +1,17 @@
-{foreach $mails as $mail}
-    {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
+<ul>
+    {foreach $mails as $key => $mail}
+        {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
+        <li>
+            <a href="#mail-{$key}">
+                {$mail->getSubject()} - {$createDate} - {$mail->getTo()}{if !empty($mail->getOrder())} - {$mail->getOrder()->getNumber()}{/if}
+            </a>
+        </li>
+    {/foreach}
+</ul>
 
-    <div class="mail">
-        <h3 class="title">{$mail->getSubject()} - {$createDate} - {$mail->getTo()}{if !empty($mail->getOrder())} - {$mail->getOrder()->getNumber()}{/if}</h3>
+
+{foreach $mails as $key => $mail}
+    <div class="mail" id="mail-{$key}">
         <div>
             <div class="mail-attributes">
                 <label>{s namespace="blauband/mail" name="mailSubject"}{/s}:</label> {$mail->getSubject()}<br/>
@@ -12,8 +21,12 @@
 
                 {if !empty($mail->getOrder())}
                     <label>{s namespace="blauband/mail" name="orderNumber"}{/s}:</label>
-                    {*<a href="#" class="open-order-link" data-order-id="{$mail->getOrder()->getId()}">{$mail->getOrder()->getNumber()}</a>*}
-                    {$mail->getOrder()->getNumber()}
+                    {if $isOwnFrame}
+                        <a href="#" class="open-order-link"
+                           data-order-id="{$mail->getOrder()->getId()}">{$mail->getOrder()->getNumber()}</a>
+                    {else}
+                        {$mail->getOrder()->getNumber()}
+                    {/if}
                     <br/>
                 {/if}
 

@@ -72,7 +72,8 @@ function registerExecuteSendButton () {
         hideErrorPanel()
 
         if(response.success){
-          showInfoPanel(sendSuccessSnippet)
+          //showInfoPanel(sendSuccessSnippet)
+          alert(sendSuccessSnippet);
         }else{
           showErrorPanel(response.message)
         }

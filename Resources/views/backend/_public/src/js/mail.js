@@ -1,9 +1,3 @@
 $(function () {
-
-  $('#mails').accordion({
-    header: '.title',
-    collapsible: true,
-    active: false,
-    animate: false
-  })
+  $('#mails').tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
 })

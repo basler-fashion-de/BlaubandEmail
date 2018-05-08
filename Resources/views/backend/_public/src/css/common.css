@@ -124,6 +124,18 @@ button.ui-button.blue:hover {
     background: linear-gradient(#46AFE1, #1177AA);
 }
 
+.ui-tabs-vertical ul.ui-tabs-nav{
+    width: 30%;
+    float: left;
+    background: none;
+    border: none;
+}
+
+.ui-tabs-vertical .ui-tabs-panel{
+    width: 69%;
+    float: right;
+}
+
 .ui-selectmenu-button,
 input[type='text']{
     height: 28px;

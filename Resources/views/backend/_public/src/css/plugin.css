@@ -15,7 +15,7 @@
 label {
     width:100%;
     font-weight: 700;
-    margin: 10px 0 2px 0;
+    margin: 25px 0 2px 0;
 }
 
 #back-button {
@@ -34,5 +34,18 @@ input[type='text'] {
 
 #send-mail-button {
     margin-bottom: 30px;
+}
+
+#mailContentWrapper {
+    margin-bottom: 20px;
+}
+
+.headerFooterMailContent{
+    width: 40%;
+    margin-right: 59%;
+    border: 1px solid grey;
+    padding: 10px;
+    font-size: 11px;
+    color: black;
 }
 /*{/literal}*/

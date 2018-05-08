@@ -75,6 +75,11 @@ class BlaubandEmail extends Plugin
                 ))->install();
                 return true;
             },
+
+            '0.0.4' => function () {
+                (new Models($this->container->get('models')))->update();
+                return true;
+            },
         ];
 
         foreach ($versions as $version => $callback) {

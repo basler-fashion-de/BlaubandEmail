@@ -41,19 +41,34 @@
     </div>
 
     <div>
-        <div>
-            <label>{s namespace="blauband/mail" name="mailSubject"}{/s}</label>
-            <input type="text" id="mailSubject" name="mailSubject"
-                   value="{$subjectContent}">
+        <div class="two-cols">
+            <label>{s namespace="blauband/mail" name="mailToBcc"}{/s}</label>
+            <select id="mailToBcc" name="mailToBcc">
+                <option value="">{s namespace="blauband/mail" name="noBcc"}{/s}</option>
+                {foreach $fromMailAddresses as $address}
+                    <option value="{$address}">{$address}</option>
+                {/foreach}
+            </select>
         </div>
+        <div class="two-cols"></div>
     </div>
 
     <div>
-        <div>
-            <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-            <textarea id="mailContent" name="mailContent">
+        <label>{s namespace="blauband/mail" name="mailSubject"}{/s}</label>
+        <input type="text" id="mailSubject" name="mailSubject"
+               value="{$subjectContent}">
+    </div>
+
+    <div id="mailContentWrapper">
+        <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
+        <div class="headerFooterMailContent" disabled>
+            {$header}
+        </div>
+        <textarea id="mailContent" name="mailContent">
                     {$bodyContent}
                 </textarea>
+        <div class="headerFooterMailContent" disabled>
+            {$footer}
         </div>
     </div>
 
