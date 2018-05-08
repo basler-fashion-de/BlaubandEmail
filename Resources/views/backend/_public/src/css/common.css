@@ -125,14 +125,24 @@ button.ui-button.blue:hover {
 }
 
 .ui-tabs-vertical ul.ui-tabs-nav{
-    width: 30%;
+    width: 36%;
     float: left;
     background: none;
     border: none;
+    overflow: hidden;
+}
+
+.ui-tabs-vertical ul.ui-tabs-nav li{
+    width: 100%;
+}
+
+.ui-tabs-vertical ul.ui-tabs-nav li,
+.ui-tabs-vertical ul.ui-tabs-nav li a{
+    cursor: pointer !important;
 }
 
 .ui-tabs-vertical .ui-tabs-panel{
-    width: 69%;
+    width: 63%;
     float: right;
 }
 

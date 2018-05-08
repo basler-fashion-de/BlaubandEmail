@@ -3,7 +3,7 @@
         {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
         <li>
             <a href="#mail-{$key}">
-                {$mail->getSubject()} - {$createDate} - {$mail->getTo()}{if !empty($mail->getOrder())} - {$mail->getOrder()->getNumber()}{/if}
+                {$mail->getSubject()|iconv_mime_decode} - {$createDate}
             </a>
         </li>
     {/foreach}
@@ -11,10 +11,11 @@
 
 
 {foreach $mails as $key => $mail}
+    {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
     <div class="mail" id="mail-{$key}">
         <div>
             <div class="mail-attributes">
-                <label>{s namespace="blauband/mail" name="mailSubject"}{/s}:</label> {$mail->getSubject()}<br/>
+                <label>{s namespace="blauband/mail" name="mailSubject"}{/s}:</label> {$mail->getSubject()|iconv_mime_decode}<br/>
                 <label>{s namespace="blauband/mail" name="mailFrom"}{/s}:</label> {$mail->getFrom()}<br/>
                 <label>{s namespace="blauband/mail" name="mailTo"}{/s}:</label> {$mail->getTo()}<br/>
                 <label>{s namespace="blauband/mail" name="mailDate"}{/s}:</label> {$createDate}<br/>
