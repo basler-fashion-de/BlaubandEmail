@@ -3,6 +3,7 @@
 use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Order\Order;
 
 class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -74,11 +75,19 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         /** @var Shopware_Components_StringCompiler $stringCompiler */
         $stringCompiler = new Shopware_Components_StringCompiler($this->view->Engine());
 
-        $customerId = $this->request->getParam('customerId');
-        $this->view->assign('customerId', $customerId);
-
         $orderId = $this->request->getParam('orderId');
         $this->view->assign('orderId', $orderId);
+
+        $customerId = $this->request->getParam('customerId');
+        if(empty($customerId)){
+            /** @var ModelManager $modelManager */
+            $modelManager = $this->container->get('models');
+            /** @var Order $o */
+            $o = $modelManager->find(Order::class, $orderId);
+            $customerId = $o->getCustomer()->getId();
+        }
+        $this->view->assign('customerId', $customerId);
+
 
         $customer = $db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customer = $customer[0];
