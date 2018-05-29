@@ -1,7 +1,10 @@
 /*{literal}*/
-
 #blauband-mail {
     height: calc(100% - 28px)
+}
+
+#blauband-mail h2 {
+    margin: 0px;
 }
 
 .mail {
@@ -24,7 +27,7 @@
 label {
     width:100%;
     font-weight: 700;
-    margin: 25px 0 2px 0;
+    margin: 20px 0 2px 0;
 }
 
 .mail-attributes label {
