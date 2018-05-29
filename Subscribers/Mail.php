@@ -5,6 +5,7 @@ namespace BlaubandEmail\Subscribers;
 use BlaubandEmail\Models\LoggedMail;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Order;
 
 class Mail implements SubscriberInterface
@@ -64,36 +65,72 @@ class Mail implements SubscriberInterface
                 $mailModel->setIsHtml(true);
             }
 
+            //Versuchen weitere Daten zu bekommen um diese zu ergänzen
+
+            //Check OrderId
             if(isset($_POST['orderId'])){
                 $order = $this->modelManager->find(Order::class, $_POST['orderId']);
 
                 if(!empty($order)){
                     $mailModel->setOrder($order);
                     $mailModel->setCustomer($order->getCustomer());
+                    $this->modelManager->persist($mailModel);
+                    $this->modelManager->flush($mailModel);
+                    return;
                 }
             }
 
+            //Check OrderNumber
+            $orderNumber = false;
             if(isset($args->getSubject()->sOrderNumber)){
-                $repo = $this->modelManager->getRepository(Order::class);
-                $order = $repo->findBy(['number' => $args->getSubject()->sOrderNumber]);
-                $order = array_shift($order);
-
-                if(!empty($order)){
-                    $mailModel->setOrder($order);
-                    $mailModel->setCustomer($order->getCustomer());
-                }
+                $orderNumber = $args->getSubject()->sOrderNumber;
             }
 
             if(isset($_POST['orderNumber'])){
+                $orderNumber = $_POST['orderNumber'];
+            }
+
+            if($orderNumber !== false){
                 $repo = $this->modelManager->getRepository(Order::class);
-                $order = $repo->findBy(['number' => $_POST['orderNumber']]);
+                $order = $repo->findBy(['number' => $orderNumber]);
                 $order = array_shift($order);
 
                 if(!empty($order)){
                     $mailModel->setOrder($order);
                     $mailModel->setCustomer($order->getCustomer());
+                    $this->modelManager->persist($mailModel);
+                    $this->modelManager->flush($mailModel);
+                    return;
                 }
             }
+
+            //Check CustomerMail
+            $customerEmail = false;
+            //Registrierung
+            if(isset($_POST['register']['personal']['email'])){
+                $customerEmail = $_POST['register']['personal']['email'];
+            }
+
+            //Newsletter
+            if(isset($_POST['newsletter'])){
+                $customerEmail = $_POST['newsletter'];
+            }
+
+            if($customerEmail !== false){
+                $repo = $this->modelManager->getRepository(Customer::class);
+                $customer = $repo->findBy(['email' => $customerEmail]);
+                $customer = array_shift($customer);
+
+                if(!empty($customer)){
+                    $mailModel->setCustomer($customer);
+                    $this->modelManager->persist($mailModel);
+                    $this->modelManager->flush($mailModel);
+                    return;
+                }
+            }
+
+            Shopware()->Container()->get('pluginlogger')->addInfo('Blauband Mail: POST '.json_encode($_POST));
+            Shopware()->Container()->get('pluginlogger')->addInfo('Blauband Mail: GET  '.json_encode($_GET));
 
             $this->modelManager->persist($mailModel);
             $this->modelManager->flush($mailModel);

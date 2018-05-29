@@ -1,21 +1,35 @@
 /*{literal}*/
 
+#blauband-mail {
+    height: calc(100% - 28px)
+}
+
+.mail {
+    overflow: scroll;
+    height: 100%;
+}
+
+.mail-list {
+    height: calc(100% - 100px);
+}
+
 .mail-body {
     background-color: #FFFFFF;
-
-    float: right;
-    width: 50%;
 }
 
 .mail-attributes {
-    float: left;
-    width: 50%;
+
 }
 
 label {
     width:100%;
     font-weight: 700;
     margin: 25px 0 2px 0;
+}
+
+.mail-attributes label {
+    width: auto;
+    margin: 0 0 2px 0;
 }
 
 #back-button {
@@ -40,7 +54,7 @@ input[type='text'] {
     margin-bottom: 20px;
 }
 
-.headerFooterMailContent{
+.headerFooterMailContent {
     width: 40%;
     margin-right: 59%;
     border: 1px solid grey;
@@ -48,4 +62,28 @@ input[type='text'] {
     font-size: 11px;
     color: black;
 }
+
+.ui-tabs-anchor {
+    width: 100%;
+}
+
+.title-from {
+    width: 70%;
+    float: left;
+    overflow: hidden;
+}
+
+.title-date {
+    width: 29%;
+    float: right;
+    text-align: right;
+    overflow: hidden;
+}
+
+.title-subject {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
 /*{/literal}*/

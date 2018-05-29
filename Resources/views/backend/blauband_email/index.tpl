@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     {include file="backend/blauband_common/header.tpl"}
 
@@ -8,7 +8,7 @@
       var limit = {$limit}
     </script>
 </head>
-<body>
+<body style="height: 100%">
 <div id="blauband-mail">
 
     {if $orderId}

@@ -145,7 +145,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
             if (!empty($this->request->getParam('mailToBcc'))) {
                 $bcc = $this->request->getParam('mailToBcc');
-            }else{
+            } else {
                 $bcc = '';
             }
 
@@ -154,12 +154,14 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $mail->addBcc($bcc);
             $mail->send();
 
+            //Gerade erstellten eintrag ergänzen um weitere Daten
             if ($this->request->getParam('orderId')) {
                 $db->executeUpdate("
-                    UPDATE blauband_email_logged_mail 
-                    SET orderID = :orderId 
-                    WHERE orderID IS NULL 
+                    UPDATE blauband_email_logged_mail
+                    SET orderID = :orderId
+                    WHERE orderID IS NULL
                     AND customerID IS NULL
+                    AND create_date > DATE_SUB(NOW(),INTERVAL 3 SECOND)
                     AND to_mail = :to",
                     [
                         'orderId' => $this->request->getParam('orderId'),
@@ -170,9 +172,10 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
             if ($this->request->getParam('customerId')) {
                 $db->executeUpdate("
-                    UPDATE blauband_email_logged_mail 
-                    SET customerID = :customerId 
+                    UPDATE blauband_email_logged_mail
+                    SET customerID = :customerId
                     WHERE customerID IS NULL
+                    AND create_date > DATE_SUB(NOW(),INTERVAL 3 SECOND)
                     AND to_mail = :to",
                     [
                         'customerId' => $this->request->getParam('customerId'),

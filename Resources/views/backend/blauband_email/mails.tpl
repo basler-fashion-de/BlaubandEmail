@@ -1,24 +1,33 @@
-<ul>
+<ul class="mail-select">
     {foreach $mails as $key => $mail}
         {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
+        {if  $mail->getCreateDate()|date_format:"%e %B %Y" == $smarty.now|date_format:"%e %B %Y"}
+            {assign 'createDateShort' $mail->getCreateDate()|date_format:"%H:%M:%S"}
+        {else}
+            {assign 'createDateShort' $mail->getCreateDate()|date_format:"%e %B %Y"}
+
+        {/if}
         <li>
             <a href="#mail-{$key}">
-                {$mail->getSubject()|iconv_mime_decode} - {$createDate}
+                <div class="title-from">{$mail->getFrom()}</div>
+                <div class="title-date">{$createDateShort}</div>
+                <div class="title-subject">{$mail->getSubject()|iconv_mime_decode}</div>
             </a>
         </li>
     {/foreach}
 </ul>
-
 
 {foreach $mails as $key => $mail}
     {assign 'createDate' $mail->getCreateDate()|date_format:"%e %B %Y - %H:%M:%S"}
     <div class="mail" id="mail-{$key}">
         <div>
             <div class="mail-attributes">
-                <label>{s namespace="blauband/mail" name="mailSubject"}{/s}:</label> {$mail->getSubject()|iconv_mime_decode}<br/>
+                <div class="title-date">{$createDate}</div>
+                <label>{s namespace="blauband/mail" name="mailSubject"}{/s}
+                    :</label> {$mail->getSubject()|iconv_mime_decode}<br/>
                 <label>{s namespace="blauband/mail" name="mailFrom"}{/s}:</label> {$mail->getFrom()}<br/>
                 <label>{s namespace="blauband/mail" name="mailTo"}{/s}:</label> {$mail->getTo()}<br/>
-                <label>{s namespace="blauband/mail" name="mailDate"}{/s}:</label> {$createDate}<br/>
+
 
                 {if !empty($mail->getOrder())}
                     <label>{s namespace="blauband/mail" name="orderNumber"}{/s}:</label>
