@@ -35,6 +35,11 @@ label {
     margin: 0 0 2px 0;
 }
 
+.mail-select {
+    height: 100%;
+    overflow: scroll !important;
+}
+
 #back-button {
     float: left;
 }
