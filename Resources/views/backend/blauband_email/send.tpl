@@ -61,15 +61,13 @@
 
     <div id="mailContentWrapper">
         <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-        <div class="headerFooterMailContent" disabled>
-            {$header|nl2br}
-        </div>
         <textarea id="mailContent" name="mailContent">
-                    {$bodyContent}
-                </textarea>
-        <div class="headerFooterMailContent" disabled>
-            {$footer|nl2br}
-        </div>
+            {$header}
+            &#10;
+            {$bodyContent}
+            &#10;
+            {$footer}
+        </textarea>
     </div>
 
     <div class="button-right-wrapper">
