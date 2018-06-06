@@ -19,7 +19,7 @@
     <hr/>
 
     <button id="send-mail-button" class="blue" data-url="{url action="send" customerId=$customerId orderId=$orderId}">
-        {s namespace="blauband/mail" name="sendMail"}{/s}
+        {s namespace="blauband/mail" name="writeMail"}{/s}
     </button>
 
     {if empty($mails)}

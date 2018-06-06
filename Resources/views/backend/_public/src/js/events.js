@@ -72,8 +72,8 @@ function registerExecuteSendButton () {
         hideErrorPanel()
 
         if(response.success){
-          //showInfoPanel(sendSuccessSnippet)
           alert(sendSuccessSnippet);
+          $(plugin_selector + ' #back-button').click();
         }else{
           showErrorPanel(response.message)
         }
