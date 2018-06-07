@@ -106,6 +106,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         foreach ($users as $user) {
             $list[] = $user['email'];
         }
+        $list = array_unique($list);
 
         $this->view->assign('fromMailAddresses', $list);
         $this->view->assign('toMailAddress', $customer['email']);
