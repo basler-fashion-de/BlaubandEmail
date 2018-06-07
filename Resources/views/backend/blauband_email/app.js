@@ -4,7 +4,7 @@
 //      {include file="backend/blauband_email/view/common/email_tab.js"}
 
 var blaubandMailIcon = '/custom/plugins/BlaubandEmail/Resources/views/backend/_public/src/images/mail.png';
-var blaubandMailIconStyle = 'width: 20px; cursor: pointer; margin-top: -3px;';
+var blaubandMailIconStyle = 'width: 20px; cursor: pointer; margin-top: -3px; float:left; margin-right:10px;';
 
 Ext.define( "Shopware.apps.Customer.view.Blauband.main.List",
   {
@@ -43,9 +43,9 @@ Ext.define( "Shopware.apps.Customer.view.Blauband.main.List",
       var frameTitle = '{s namespace="blauband/mail" name="mail"}{/s}';
       var buttonTitle = '{s namespace="blauband/mail" name="sendMailShort"}{/s}';
       var button = '<img src="'+blaubandMailIcon+'" style="'+blaubandMailIconStyle+'" onclick="Shopware.ModuleManager.createSimplifiedModule(\'BlaubandEmail\/index\/frame\/1\/customerId\/'+customerId+'\', { \'title\': \''+frameTitle+'\'})" />'
-      var style = 'display: block;width: 130px;float: left;overflow: hidden;margin-right: 10px;'
+      var style = 'width: 130px;overflow: hidden;margin-right: 10px;'
 
-      return Ext.String.format('<a style="'+style+'" href="mailto:[0]" data-qtip="[0]">[0]</a>'+button, value);
+      return Ext.String.format(button+'<a style="'+style+'" href="mailto:[0]" data-qtip="[0]">[0]</a>', value);
     }
   }
   );
