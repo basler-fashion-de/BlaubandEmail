@@ -24,6 +24,16 @@
     <h2>{s namespace="blauband/mail" name="sendMailHeader"}{/s}</h2>
     <hr/>
 
+    <div class="button-right-wrapper">
+        <button id="back-button" data-url="{url action="index" customerId=$customerId orderId=$orderId}">
+            {s namespace="blauband/mail" name="back"}{/s}
+        </button>
+
+        <button id="execute-send-button" class="blue" data-url="{url action="executeSend"}">
+            {s namespace="blauband/mail" name="sendMail"}{/s}
+        </button>
+    </div>
+    
     <div>
         <div class="two-cols">
             <label>{s namespace="blauband/mail" name="mailTo"}{/s}</label>
@@ -68,16 +78,6 @@
             &#10;
             {$footer}
         </textarea>
-    </div>
-
-    <div class="button-right-wrapper">
-        <button id="back-button" data-url="{url action="index" customerId=$customerId orderId=$orderId}">
-            {s namespace="blauband/mail" name="back"}{/s}
-        </button>
-
-        <button id="execute-send-button" class="blue" data-url="{url action="executeSend"}">
-            {s namespace="blauband/mail" name="sendMail"}{/s}
-        </button>
     </div>
 </div>
 
