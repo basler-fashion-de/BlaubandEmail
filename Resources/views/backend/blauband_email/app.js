@@ -4,7 +4,7 @@
 //      {include file="backend/blauband_email/view/common/email_tab.js"}
 
 var blaubandMailIcon = '/custom/plugins/BlaubandEmail/Resources/views/backend/_public/src/images/mail.png';
-var blaubandMailIconStyle = 'width: 20px; cursor: pointer; margin-top: -3px; float:left; margin-right:10px;';
+var blaubandMailIconStyle = 'width: 20px; cursor: pointer; margin-top: 1px; float:left; margin-right:10px;';
 
 Ext.define( "Shopware.apps.Customer.view.Blauband.main.List",
   {
