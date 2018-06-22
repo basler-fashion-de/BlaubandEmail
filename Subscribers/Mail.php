@@ -129,9 +129,6 @@ class Mail implements SubscriberInterface
                 }
             }
 
-            Shopware()->Container()->get('pluginlogger')->addInfo('Blauband Mail: POST '.json_encode($_POST));
-            Shopware()->Container()->get('pluginlogger')->addInfo('Blauband Mail: GET  '.json_encode($_GET));
-
             $this->modelManager->persist($mailModel);
             $this->modelManager->flush($mailModel);
         }catch (\Exception $e){
