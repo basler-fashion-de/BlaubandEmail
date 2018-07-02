@@ -33,7 +33,7 @@
             {s namespace="blauband/mail" name="sendMail"}{/s}
         </button>
     </div>
-    
+
     <div>
         <div class="two-cols">
             <label>{s namespace="blauband/mail" name="mailTo"}{/s}</label>
@@ -72,11 +72,11 @@
     <div id="mailContentWrapper">
         <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
         <textarea id="mailContent" name="mailContent">
-            {$header}
+            {$header|regex_replace:"/[\r\t\n]/":"&#10;"}
             &#10;
             {$bodyContent}
             &#10;
-            {$footer}
+            {$footer|regex_replace:"/[\r\t\n]/":"&#10;"}
         </textarea>
     </div>
 </div>
