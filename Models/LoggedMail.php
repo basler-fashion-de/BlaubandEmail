@@ -125,7 +125,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $from
      */
-    public function setFrom(string $from)
+    public function setFrom($from)
     {
         $this->from = $from;
     }
@@ -141,7 +141,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $subject
      */
-    public function setSubject(string $subject)
+    public function setSubject($subject)
     {
         $this->subject = $subject;
     }
@@ -157,7 +157,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $body
      */
-    public function setBody(string $body)
+    public function setBody($body)
     {
         $this->body = $body;
     }
@@ -173,7 +173,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $to
      */
-    public function setTo(string $to)
+    public function setTo($to)
     {
         $this->to = $to;
     }
@@ -189,7 +189,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $bcc
      */
-    public function setBcc(string $bcc)
+    public function setBcc($bcc)
     {
         $this->bcc = $bcc;
     }
@@ -205,7 +205,7 @@ class LoggedMail extends ModelEntity
     /**
      * @param bool $isHtml
      */
-    public function setIsHtml(bool $isHtml)
+    public function setIsHtml($isHtml)
     {
         $this->isHtml = $isHtml;
     }
