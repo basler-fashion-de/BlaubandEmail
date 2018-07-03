@@ -18,7 +18,7 @@
     {/if}
     <hr/>
 
-    <button id="send-mail-button" class="blue" data-url="{url action="send" customerId=$customerId orderId=$orderId}">
+    <button id="send-mail-button" class="blue" data-url="{url action="send" customerId=$customerId orderId=$orderId}{if $isOwnFrame}/frame/1{/if}">
         {s namespace="blauband/mail" name="writeMail"}{/s}
     </button>
 

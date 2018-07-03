@@ -110,6 +110,11 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
         $this->view->assign('fromMailAddresses', $list);
         $this->view->assign('toMailAddress', $customer['email']);
+        $this->view->assign('toFullName', $customer['firstname'].' '.$customer['lastname']);
+        $this->view->assign('toNumber', $customer['customernumber']);
+
+        $isOwnFrame = $this->request->getParam('frame') === '1';
+        $this->view->assign('isOwnFrame', $isOwnFrame);
 
         $templateContext = [
             'customer' => $customer,

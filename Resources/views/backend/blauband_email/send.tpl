@@ -36,7 +36,12 @@
 
     <div>
         <div class="two-cols">
-            <label>{s namespace="blauband/mail" name="mailTo"}{/s}</label>
+            <label>
+                {s namespace="blauband/mail" name="mailTo"}{/s}
+                {if $isOwnFrame}
+                    <a href="#" class="open-customer-link" data-customer-id="{$customerId}">{$toFullName} ({$toNumber})</a>
+                {/if}
+            </label>
             <input type="hidden" id="mailTo" name="mailTo" value="{$toMailAddress}">
             <input type="text" value="{$toMailAddress}" disabled>
         </div>

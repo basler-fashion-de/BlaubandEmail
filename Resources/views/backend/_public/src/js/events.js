@@ -16,6 +16,7 @@ function registerEvents () {
   registerNextMailsButton()
   registerBackButton()
   registerOpenOrderButton()
+  registerOpenCustomerButton()
   registerSendButton()
   registerExecuteSendButton()
   registerAddAttachment()
@@ -50,6 +51,13 @@ function registerOpenOrderButton () {
   $(plugin_selector + ' .open-order-link').on('click', function () {
     orderId = $(this).data('order-id')
     openOrderWindow(orderId)
+  })
+}
+
+function registerOpenCustomerButton () {
+  $(plugin_selector + ' .open-customer-link').on('click', function () {
+    customerId = $(this).data('customer-id')
+    openCustomerWindow(customerId)
   })
 }
 
