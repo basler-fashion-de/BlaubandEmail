@@ -76,6 +76,8 @@ class MailService
             $mailModel->setCustomer($this->customer);
         }
 
+        $mailModel->setAttachments(json_encode($mail->getParts()));
+
         $this->modelManager->persist($mailModel);
         $this->modelManager->flush($mailModel);
     }

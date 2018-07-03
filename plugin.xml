@@ -14,8 +14,8 @@
     <!-- Deutscher Changelog immer oben platzieren -->
 
     <changelog version="1.2.1">
-        <changes lang="de">Verbesserte Kompalität mit Pickware</changes>
-        <changes lang="en">Improved compatibility with Pickware</changes>
+        <changes lang="de">Feature: Anhänge hinzugefügt</changes>
+        <changes lang="en">Feature: Add attachment</changes>
     </changelog>
 
     <changelog version="1.2.0">

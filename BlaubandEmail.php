@@ -113,9 +113,12 @@ class BlaubandEmail extends Plugin
                     $this->container->get('shopware_attribute.crud_service'),
                     $this->container->get('models')
                 ))->install();
-
                 return true;
             },
+
+            '1.2.1' => function(){
+                (new Models($this->container->get('models')))->update();
+            }
         ];
 
         foreach ($versions as $version => $callback) {

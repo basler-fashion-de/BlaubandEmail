@@ -72,6 +72,14 @@ input[type='text'] {
     margin-bottom: 20px;
 }
 
+.mail-attachment {
+    width:100%;
+}
+
+#addAttachment {
+    margin-top: 10px;
+}
+
 .headerFooterMailContent {
     width: 40%;
     margin-right: 59%;

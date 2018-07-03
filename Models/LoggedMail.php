@@ -64,6 +64,13 @@ class LoggedMail extends ModelEntity
     private $isHtml;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="attachments", type="text")
+     */
+    private $attachments;
+
+    /**
      * @var int
      * @ORM\Column(name="orderID", type="integer", nullable=true)
      */
@@ -208,6 +215,22 @@ class LoggedMail extends ModelEntity
     public function setIsHtml($isHtml)
     {
         $this->isHtml = $isHtml;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param string $attachments
+     */
+    public function setAttachments(string $attachments)
+    {
+        $this->attachments = $attachments;
     }
 
     /**

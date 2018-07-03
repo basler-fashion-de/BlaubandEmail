@@ -23,6 +23,7 @@ function registerEvents () {
   registerCloseAdButton()
 
   registerNewsletterPopupEvents()
+  registerAddAttachment()
 }
 
 function showNewsletterPopup () {
@@ -81,13 +82,36 @@ function registerSendButton () {
 function registerExecuteSendButton () {
   $(plugin_selector + ' #execute-send-button').on('click', function () {
     var url = $(this).data('url')
-    var params = $('input, textarea, select').serialize()
+    var params = $('input, textarea, select')
+    var formData = new FormData()
+
+    $('.mail-attachment').each(function (i, el) {
+      formData.append('file' + i, this.files[0])
+    })
+
+    for (var i = 0; i < params.length; i++) {
+      formData.append(params[i].name, params[i].value)
+    }
 
     $.ajax({
       type: 'post',
       url: url,
-      data: params,
-      success: function (response) {
+      contentType: false,
+      cache: false,
+      processData: false,
+      data: formData,
+      xhr: function () {
+        var jqXHR = null
+        if (window.ActiveXObject) {
+          jqXHR = new window.ActiveXObject('Microsoft.XMLHTTP')
+        }
+        else {
+          jqXHR = new window.XMLHttpRequest()
+        }
+
+        return jqXHR
+      },
+      complete: function (response) {
         hideInfoPanel()
         hideErrorPanel()
 
@@ -99,6 +123,14 @@ function registerExecuteSendButton () {
         }
       }
     })
+  });
+}
+
+function registerAddAttachment () {
+  $('#addAttachment').on('click', function () {
+    var $me = $(this)
+    var count = $('#mailContentWrapper').find('input[type="file"]').length + 1
+    $me.before('<input type="file" name="file_' + count + '" id="file_' + count + '"  class="mail-attachment" accept="image/png, image/gif, image/jpeg, application/pdf"/>')
   })
 }
 
