@@ -18,6 +18,7 @@ function registerEvents () {
   registerOpenOrderButton()
   registerSendButton()
   registerExecuteSendButton()
+  registerAddAttachment()
 
 }
 
@@ -60,24 +61,56 @@ function registerSendButton () {
 
 function registerExecuteSendButton () {
   $(plugin_selector + ' #execute-send-button').on('click', function () {
-    var url = $(this).data('url')
-    var params = $('input, textarea, select').serialize()
+      var url = $(this).data('url')
+      var params = $('input, textarea, select').serializeArray()
+      var formData = new FormData()
 
-    $.ajax({
-      type: 'post',
-      url: url,
-      data: params,
-      success: function (response) {
-        hideInfoPanel()
-        hideErrorPanel()
+    $('.mail-attachment').each(function (i, el) {
+        formData.append('file'+i, this.files[0])
+      })
 
-        if(response.success){
-          alert(sendSuccessSnippet);
-          $(plugin_selector + ' #back-button').click();
-        }else{
-          showErrorPanel(response.message)
-        }
+      for (var i = 0; i < params.length; i++) {
+        formData.append(params[i].name, params[i].value)
       }
-    })
+
+      $.ajax({
+        type: 'post',
+        url: url,
+        contentType: false,
+        cache: false,
+        processData: false,
+        data: formData,
+        xhr: function () {
+          var jqXHR = null
+          if (window.ActiveXObject) {
+            jqXHR = new window.ActiveXObject('Microsoft.XMLHTTP')
+          }
+          else {
+            jqXHR = new window.XMLHttpRequest()
+          }
+
+          return jqXHR
+        },
+        complete: function (response) {
+          hideInfoPanel()
+          hideErrorPanel()
+
+          if (response.success) {
+            alert(sendSuccessSnippet)
+            $(plugin_selector + ' #back-button').click()
+          } else {
+            showErrorPanel(response.message)
+          }
+        }
+      })
+    }
+  )
+}
+
+function registerAddAttachment () {
+  $('#addAttachment').on('click', function () {
+    var $me = $(this)
+    var count = $('#mailContentWrapper').find('input[type="file"]').length + 1
+      $me.before('<input type="file" name="file_' + count + '" id="file_' + count + '"  class="mail-attachment" accept="image/png, image/gif, image/jpeg, application/pdf"/>')
   })
 }

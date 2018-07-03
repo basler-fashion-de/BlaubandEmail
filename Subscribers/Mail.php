@@ -65,6 +65,8 @@ class Mail implements SubscriberInterface
                 $mailModel->setIsHtml(true);
             }
 
+            $mailModel->setAttachments(json_encode($mail->getParts()));
+
             //Versuchen weitere Daten zu bekommen um diese zu ergänzen
 
             //Check OrderId

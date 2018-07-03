@@ -162,6 +162,18 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $mail = $templateMail->createMail("blaubandMail", $this->request->getParams());
             $mail->addTo($to);
             $mail->addBcc($bcc);
+
+            foreach ($_FILES as $file){
+                $content = file_get_contents($file['tmp_name']);
+                $zendAttachment = new Zend_Mime_Part($content);
+                $zendAttachment->type = $file['type'];
+                $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
+                $zendAttachment->filename = $file['name'];
+
+                $mail->addAttachment($zendAttachment);
+            }
+
             $mail->send();
 
             //Gerade erstellten eintrag ergänzen um weitere Daten

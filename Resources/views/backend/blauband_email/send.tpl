@@ -78,6 +78,9 @@
             &#10;
             {$footer|regex_replace:"/[\r\t\n]/":"&#10;"}
         </textarea>
+
+        <h4>{s namespace="blauband/mail" name="mailAttachments"}{/s}</h4>
+        <button id="addAttachment">{s namespace="blauband/mail" name="addAttachment"}{/s}</button>
     </div>
 </div>
 

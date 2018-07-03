@@ -80,6 +80,11 @@ class BlaubandEmail extends Plugin
                 (new Models($this->container->get('models')))->update();
                 return true;
             },
+
+            '1.1.0' => function () {
+                (new Models($this->container->get('models')))->update();
+                return true;
+            },
         ];
 
         foreach ($versions as $version => $callback) {
