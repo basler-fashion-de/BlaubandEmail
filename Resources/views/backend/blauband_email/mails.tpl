@@ -50,7 +50,7 @@
             </div>
 
             {$attachmentArray = json_decode($mail->getAttachments(), true)}
-            <div class="mail-attachments" {if count($attachmentArray == 0)}style="display: none"{/if}>
+            <div class="mail-attachments" {if count($attachmentArray) == 0}style="display: none"{/if}>
                 <label>{s namespace="blauband/mail" name="mailAttachments"}{/s}:</label><br/>
 
                 {foreach $attachmentArray as $attachment}

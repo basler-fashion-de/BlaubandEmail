@@ -6,6 +6,7 @@ use BlaubandEmail\Models\LoggedMail;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Order\Order;
 
 class Mail implements SubscriberInterface
@@ -68,6 +69,19 @@ class Mail implements SubscriberInterface
             $mailModel->setAttachments(json_encode($mail->getParts()));
 
             //Versuchen weitere Daten zu bekommen um diese zu ergänzen
+
+            //Check DokumentId
+            if(isset($_POST['documentId'])){
+                $dokument = $this->modelManager->find(Document::class, $_POST['documentId']);
+
+                if(!empty($dokument)){
+                    $mailModel->setOrder($dokument->getOrder());
+                    $mailModel->setCustomer($dokument->getOrder()->getCustomer());
+                    $this->modelManager->persist($mailModel);
+                    $this->modelManager->flush($mailModel);
+                    return;
+                }
+            }
 
             //Check OrderId
             if(isset($_POST['orderId'])){
