@@ -4,9 +4,30 @@ use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Action implements CSRFWhitelistAware
 {
+    private $customSnippetNamespace = 'blauband/mail_custom_snippets';
+
+    /* @var $db \Doctrine\DBAL\Connection */
+    private $db;
+
+    /** @var Shopware_Components_Config $config */
+    private $config;
+
+    /** @var array $pluginConfig */
+    private $pluginConfig;
+
+    /** @var ModelManager $modelManager */
+    private $modelManager;
+
+    /** @var \Shopware_Components_Snippet_Manager $snippets */
+    private $snippets;
+
+    /** @var Shopware_Components_TemplateMail $templateMail */
+    private $templateMail;
+
     public function getWhitelistedCSRFActions()
     {
         return [
@@ -18,16 +39,18 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
     public function preDispatch()
     {
+        $this->db = $this->container->get('dbal_connection');
+        $this->config = $this->container->get('config');
+        $this->pluginConfig = $this->container->get('shopware.plugin.cached_config_reader')->getByPluginName('BlaubandEmail');
+        $this->modelManager = $this->container->get('models');
+        $this->snippets = $this->container->get('snippets');
+
         $this->view->addTemplateDir(__DIR__ . "/../../Resources/views");
     }
 
     public function indexAction()
     {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->container->get('models');
-
         $isOwnFrame = $this->request->getParam('frame') === '1';
-
         $customerId = $this->request->getParam('customerId');
         $orderId = $this->request->getParam('orderId');
 
@@ -37,7 +60,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             0 :
             $this->request->getParam('offset');
 
-        $repository = $modelManager->getRepository(LoggedMail::class);
+        $repository = $this->modelManager->getRepository(LoggedMail::class);
         $criteria = [];
         $orderBy = ['createDate' => 'DESC'];
 
@@ -63,41 +86,25 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
     public function sendAction()
     {
-        /* @var $db \Doctrine\DBAL\Connection */
-        $db = $this->container->get('dbal_connection');
-
-        /** @var Shopware_Components_Config $config */
-        $config = $this->container->get('config');
-
-        /** @var array $pluginConfig */
-        $pluginConfig = $this->container->get('shopware.plugin.cached_config_reader')->getByPluginName('BlaubandEmail');
-
-        /** @var Shopware_Components_StringCompiler $stringCompiler */
-        $stringCompiler = new Shopware_Components_StringCompiler($this->view->Engine());
-
         $orderId = $this->request->getParam('orderId');
-        $this->view->assign('orderId', $orderId);
-
+        $isOwnFrame = $this->request->getParam('frame') === '1';
         $customerId = $this->request->getParam('customerId');
-        if(empty($customerId)){
-            /** @var ModelManager $modelManager */
-            $modelManager = $this->container->get('models');
+
+        if (empty($customerId)) {
             /** @var Order $o */
-            $o = $modelManager->find(Order::class, $orderId);
+            $o = $this->modelManager->find(Order::class, $orderId);
             $customerId = $o->getCustomer()->getId();
         }
-        $this->view->assign('customerId', $customerId);
 
-
-        $customer = $db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
+        $customer = $this->db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customer = $customer[0];
 
-        $owner = $config->get('masterdata::mail');
+        $owner = $this->config->get('masterdata::mail');
 
         $currentUser = $this->container->get('auth')->getAdapter(0)->getResultRowObject('email');
         $currentUser = $currentUser->email;
 
-        $users = $db->fetchAll(
+        $users = $this->db->fetchAll(
             'SELECT email FROM s_core_auth WHERE email != ":currentUser" && email != ":owner" ORDER BY email',
             ['currentUser' => $currentUser, 'owner' => $owner]
         );
@@ -108,21 +115,25 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         }
         $list = array_unique($list);
 
-        $this->view->assign('fromMailAddresses', $list);
-        $this->view->assign('toMailAddress', $customer['email']);
-        $this->view->assign('toFullName', $customer['firstname'].' '.$customer['lastname']);
-        $this->view->assign('toNumber', $customer['customernumber']);
+        $repository = $this->modelManager->getRepository(Shop::class);
+        $shops = $repository->findAll();
+        $customSnippets = [];
+        foreach ($shops as $shop){
+            $this->snippets->setShop($shop);
 
-        $isOwnFrame = $this->request->getParam('frame') === '1';
-        $this->view->assign('isOwnFrame', $isOwnFrame);
+            $name = $shop->getName().' / '.$shop->getLocale()->getLocale();
+            $data = $this->snippets->getNamespace($this->customSnippetNamespace)->toArray();
+            $customSnippets[$shop->getId()]['name'] = $name;
+            $customSnippets[$shop->getId()]['data'] = $data;
+        }
 
         $templateContext = [
             'customer' => $customer,
-            'shopName' => $config->get('shopName'),
+            'shopName' => $this->config->get('shopName'),
         ];
 
         if (!empty($orderId)) {
-            $order = $db->fetchAll(
+            $order = $this->db->fetchAll(
                 "SELECT * FROM s_order WHERE id = :id",
                 ['id' => $orderId]
             );
@@ -130,32 +141,33 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $templateContext['order'] = $order[0];
         }
 
-        $contentTemplate = $pluginConfig['CONTENT_TEMPLATE'];
-        $content = $stringCompiler->compileString($contentTemplate, $templateContext);
+        $stringCompiler = new Shopware_Components_StringCompiler($this->view->Engine());
+
+        $content = $stringCompiler->compileString($this->pluginConfig['CONTENT_TEMPLATE'], $templateContext);
         $this->view->assign('bodyContent', $content);
 
-        $subjectTemplate = $pluginConfig['SUBJECT_TEMPLATE'];
-        $content = $stringCompiler->compileString($subjectTemplate, $templateContext);
+        $content = $stringCompiler->compileString($this->pluginConfig['SUBJECT_TEMPLATE'], $templateContext);
         $this->view->assign('subjectContent', $content);
 
-        $footer = $config->get('emailfooterplain');
-        $content = $stringCompiler->compileString($footer, $templateContext);
+        $content = $stringCompiler->compileString($this->config->get('emailfooterplain'), $templateContext);
         $this->view->assign('footer', $content);
 
-        $header = $config->get('emailheaderplain');
-        $content = $stringCompiler->compileString($header, $templateContext);
+        $content = $stringCompiler->compileString($this->config->get('emailheaderplain'), $templateContext);
         $this->view->assign('header', $content);
+
+        $this->view->assign('orderId', $orderId);
+        $this->view->assign('customerId', $customerId);
+        $this->view->assign('fromMailAddresses', $list);
+        $this->view->assign('toMailAddress', $customer['email']);
+        $this->view->assign('toFullName', $customer['firstname'] . ' ' . $customer['lastname']);
+        $this->view->assign('toNumber', $customer['customernumber']);
+        $this->view->assign('isOwnFrame', $isOwnFrame);
+        $this->view->assign('customSnippets', $customSnippets);
     }
 
     public function executeSendAction()
     {
         try {
-            /** @var Shopware_Components_TemplateMail $templateMail */
-            $templateMail = $this->container->get('TemplateMail');
-
-            /* @var $db \Doctrine\DBAL\Connection */
-            $db = $this->container->get('dbal_connection');
-
             $to = $this->request->getParam('mailTo');
 
             if (!empty($this->request->getParam('mailToBcc'))) {
@@ -164,11 +176,11 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 $bcc = '';
             }
 
-            $mail = $templateMail->createMail("blaubandMail", $this->request->getParams());
+            $mail = $this->templateMail->createMail("blaubandMail", $this->request->getParams());
             $mail->addTo($to);
             $mail->addBcc($bcc);
 
-            foreach ($_FILES as $file){
+            foreach ($_FILES as $file) {
                 $content = file_get_contents($file['tmp_name']);
                 $zendAttachment = new Zend_Mime_Part($content);
                 $zendAttachment->type = $file['type'];
@@ -183,7 +195,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
             //Gerade erstellten eintrag ergänzen um weitere Daten
             if ($this->request->getParam('orderId')) {
-                $db->executeUpdate("
+                $this->db->executeUpdate("
                     UPDATE blauband_email_logged_mail
                     SET orderID = :orderId
                     WHERE orderID IS NULL
@@ -198,7 +210,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             }
 
             if ($this->request->getParam('customerId')) {
-                $db->executeUpdate("
+                $this->db->executeUpdate("
                     UPDATE blauband_email_logged_mail
                     SET customerID = :customerId
                     WHERE customerID IS NULL

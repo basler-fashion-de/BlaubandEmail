@@ -2,6 +2,7 @@
 <html>
 <head>
     {include file="backend/blauband_common/header.tpl"}
+    <script type="text/javascript" src="{link file="backend/_public/src/js/snippet.js"}"></script>
 </head>
 <body>
 <div id="blauband-mail">
@@ -74,18 +75,45 @@
                value="{$subjectContent}">
     </div>
 
-    <div id="mailContentWrapper">
-        <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-        <textarea id="mailContent" name="mailContent">
-            {$header|regex_replace:"/[\r\t\n]/":"&#10;"}
-            &#10;
-            {$bodyContent}
-            &#10;
-            {$footer|regex_replace:"/[\r\t\n]/":"&#10;"}
-        </textarea>
+    <div>
+        <div class="two-cols">
+            <div id="mailContentWrapper">
+                <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
+                <textarea id="mailContent" name="mailContent">
+                    {$header|regex_replace:"/[\r\t\n]/":"&#10;"}
+                    &#10;
+                    {$bodyContent}
+                    &#10;
+                    {$footer|regex_replace:"/[\r\t\n]/":"&#10;"}
+                </textarea>
 
-        <h4>{s namespace="blauband/mail" name="mailAttachments"}{/s}</h4>
-        <button id="addAttachment">{s namespace="blauband/mail" name="addAttachment"}{/s}</button>
+                <h4>{s namespace="blauband/mail" name="mailAttachments"}{/s}</h4>
+                <button id="addAttachment">{s namespace="blauband/mail" name="addAttachment"}{/s}</button>
+            </div>
+
+        </div>
+        <div class="two-cols">
+            <div id="mailCustomSnippets">
+                <label>{s namespace="blauband/mail" name="mailSnippets"}{/s}</label>
+                <select id="customSnippets" name="customSnippets">
+                    {foreach $customSnippets as $id => $data}
+                        <option value="{$id}">{$data.name}</option>
+                    {/foreach}
+                </select>
+                <div class="customSnippetsDataWrapper">
+                    {foreach $customSnippets as $id => $data}
+                        <div class="customSnippetsData" id="customSnippetsData{$id}">
+                            {foreach $data.data as $snippetName => $snippet}
+                                <div class="snippetRow">
+                                    <div class="snippetName">{$snippetName}</div>
+                                    <div class="snippet">{$snippet}</div>
+                                </div>
+                            {/foreach}
+                        </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
