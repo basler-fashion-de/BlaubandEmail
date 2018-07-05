@@ -3,7 +3,7 @@
     <mails>
         <name>blaubandMail</name>
         <fromMail>{$mailFrom}</fromMail>
-        <fromName>{$mailFrom}</fromName>
+        <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
         <htmlContent>
 {$mailContent|trim}

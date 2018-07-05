@@ -19,6 +19,7 @@
 
     <input type="hidden" id="customerId" name="customerId" value="{$customerId}">
     <input type="hidden" id="orderId" name="orderId" value="{$orderId}">
+    <input type="hidden" id="shopName" name="shopName" value="{$shopName}">
 
 
     <h2>{s namespace="blauband/mail" name="sendMailHeader"}{/s}</h2>

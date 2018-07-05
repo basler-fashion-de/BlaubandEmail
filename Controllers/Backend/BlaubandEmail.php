@@ -66,9 +66,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         /* @var $db \Doctrine\DBAL\Connection */
         $db = $this->container->get('dbal_connection');
 
-        /** @var Shopware_Components_Config $config */
-        $config = $this->container->get('config');
-
         /** @var array $pluginConfig */
         $pluginConfig = $this->container->get('shopware.plugin.cached_config_reader')->getByPluginName('BlaubandEmail');
 
@@ -91,6 +88,12 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
         $customer = $db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customer = $customer[0];
+
+        $customerShop = $this->modelManager->getRepository(Shop::class)->find($customer['subshopID']);
+
+        /** @var Shopware_Components_Config $config */
+        $config = $this->container->get('config');
+        $config->setShop($customerShop);
 
         $owner = $config->get('masterdata::mail');
 
@@ -140,6 +143,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $header = $config->get('emailheaderplain');
         $content = $stringCompiler->compileString($header, $templateContext);
         $this->view->assign('header', $content);
+
+        $this->view->assign('shopName', $config->get('shopName'));
     }
 
     public function executeSendAction()
