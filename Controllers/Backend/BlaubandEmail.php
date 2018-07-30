@@ -4,6 +4,8 @@ use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Mail\Mail;
 
 class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -63,6 +65,9 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
     public function sendAction()
     {
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->container->get('models');
+
         /* @var $db \Doctrine\DBAL\Connection */
         $db = $this->container->get('dbal_connection');
 
@@ -89,7 +94,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $customer = $db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customer = $customer[0];
 
-        $customerShop = $this->modelManager->getRepository(Shop::class)->find($customer['subshopID']);
+        $customerShop = $modelManager->getRepository(Shop::class)->find($customer['subshopID']);
 
         /** @var Shopware_Components_Config $config */
         $config = $this->container->get('config');
@@ -128,6 +133,13 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $templateContext['order'] = $order[0];
         }
 
+        $isHtml = $db->fetchColumn(
+            'SELECT ishtml FROM s_core_config_mails WHERE name = "sORDER"'
+        );
+
+        $isHtml = $isHtml === '0' ? false : true;
+        $this->view->assign('isHtml', $isHtml);
+
         $contentTemplate = $pluginConfig['CONTENT_TEMPLATE'];
         $content = $stringCompiler->compileString($contentTemplate, $templateContext);
         $this->view->assign('bodyContent', $content);
@@ -136,13 +148,21 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $content = $stringCompiler->compileString($subjectTemplate, $templateContext);
         $this->view->assign('subjectContent', $content);
 
-        $footer = $config->get('emailfooterplain');
-        $content = $stringCompiler->compileString($footer, $templateContext);
-        $this->view->assign('footer', $content);
+        $plainFooter = $config->get('emailfooterplain');
+        $content = $stringCompiler->compileString($plainFooter, $templateContext);
+        $this->view->assign('plainFooter', $content);
 
-        $header = $config->get('emailheaderplain');
-        $content = $stringCompiler->compileString($header, $templateContext);
-        $this->view->assign('header', $content);
+        $plainHeader = $config->get('emailheaderplain');
+        $content = $stringCompiler->compileString($plainHeader, $templateContext);
+        $this->view->assign('plainHeader', $content);
+
+        $htmlFooter = $config->get('emailfooterhtml');
+        $content = $stringCompiler->compileString($htmlFooter, $templateContext);
+        $this->view->assign('htmlFooter', $content);
+
+        $htmlHeader = $config->get('emailheaderhtml');
+        $content = $stringCompiler->compileString($htmlHeader, $templateContext);
+        $this->view->assign('htmlHeader', $content);
 
         $this->view->assign('shopName', $config->get('shopName'));
     }
@@ -150,6 +170,9 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     public function executeSendAction()
     {
         try {
+            /** @var ModelManager $modelManager */
+            $modelManager = $this->container->get('models');
+
             /** @var Shopware_Components_TemplateMail $templateMail */
             $templateMail = $this->container->get('TemplateMail');
 
@@ -164,7 +187,15 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 $bcc = '';
             }
 
-            $mail = $templateMail->createMail("blaubandMail", $this->request->getParams());
+            $isHtml = $this->request->getParam('selectedTab') === 'html';
+
+            /* @var $mailModel \Shopware\Models\Mail\Mail */
+            $mailModel = $modelManager->getRepository(Mail::class)->findOneBy(
+                ['name' => 'blaubandMail']
+            );
+            $mailModel->setIsHtml($isHtml);
+
+            $mail = $templateMail->createMail($mailModel, $this->request->getParams());
             $mail->addTo($to);
             $mail->addBcc($bcc);
             $mail->send();

@@ -80,6 +80,15 @@ class BlaubandEmail extends Plugin
                 (new Models($this->container->get('models')))->update();
                 return true;
             },
+
+            '1.1.0' => function () {
+                (new Mails(
+                    $this->container->get('models'),
+                    new ConfigService($this->getPath() . '/Resources/mails.xml'),
+                    $this->getPath()
+                ))->update();
+                return true;
+            },
         ];
 
         foreach ($versions as $version => $callback) {

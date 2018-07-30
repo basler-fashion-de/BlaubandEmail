@@ -6,10 +6,12 @@
         <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
         <htmlContent>
-{$mailContent|trim}
+            {include file="string:{config name=emailheaderhtml}"}
+            {$htmlMailContent|nl2br}
+            {include file="string:{config name=emailfooterhtml}"}
         </htmlContent>
         <plainContent>
-{$mailContent|trim}
+{$plainMailContent|trim}
         </plainContent>
         <isHtml>false</isHtml>
     </mails>

@@ -59,6 +59,11 @@ input[type='text'] {
 }
 
 #mailContentWrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#htmlMainContent label{
     margin-bottom: 20px;
 }
 

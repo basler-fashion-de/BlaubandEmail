@@ -35,26 +35,7 @@ class Mails
             $mailModel = $repository->findOneBy(['name' => $mail['name']]);
             if (!$mailModel) {
                 $mailModel = new Mail();
-                $mailModel->setName($mail['name']);
-                $mailModel->setFromMail($mail['fromMail']);
-                $mailModel->setFromName($mail['fromName']);
-                $mailModel->setSubject($mail['subject']);
-
-                if(is_file($this->pluginRoot.$mail['plainContent'])){
-                    $mailModel->setContent(file_get_contents($this->pluginRoot.$mail['plainContent']));
-                }else{
-                    $mailModel->setContent($mail['plainContent']);
-                }
-
-                if(is_file($this->pluginRoot.$mail['htmlContent'])){
-                    $mailModel->setContentHtml(file_get_contents($this->pluginRoot.$mail['htmlContent']));
-                }else{
-                    $mailModel->setContentHtml($mail['htmlContent']);
-                }
-
-                $mailModel->setIsHtml(($mail['isHtml'] == 'true'));
-                $mailModel->setMailtype(Mail::MAILTYPE_USER);
-
+                $this->setMailModelData($mailModel, $mail);
                 $this->modelManager->persist($mailModel);
             }
         }
@@ -82,6 +63,39 @@ class Mails
      */
     public function update()
     {
+        $repository = $this->modelManager->getRepository(Mail::class);
 
+        foreach ($this->mails as $mail) {
+            $mailModel = $repository->findOneBy(['name' => $mail['name']]);
+            if ($mailModel) {
+                $this->setMailModelData($mailModel, $mail);
+            }
+        }
+
+        $this->modelManager->flush();
+    }
+
+    private function setMailModelData(&$mailModel, $data){
+        $mailModel->setName($data['name']);
+        $mailModel->setFromMail($data['fromMail']);
+        $mailModel->setFromName($data['fromName']);
+        $mailModel->setSubject($data['subject']);
+
+        if(is_file($this->pluginRoot.$data['plainContent'])){
+            $mailModel->setContent(file_get_contents($this->pluginRoot.$data['plainContent']));
+        }else{
+            $mailModel->setContent($data['plainContent']);
+        }
+
+        if(is_file($this->pluginRoot.$data['htmlContent'])){
+            $mailModel->setContentHtml(file_get_contents($this->pluginRoot.$data['htmlContent']));
+        }else{
+            $mailModel->setContentHtml($data['htmlContent']);
+        }
+
+        $mailModel->setIsHtml(($data['isHtml'] == 'true'));
+        $mailModel->setMailtype(Mail::MAILTYPE_USER);
+
+        return $mailModel;
     }
 }
