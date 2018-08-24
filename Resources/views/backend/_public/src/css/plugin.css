@@ -63,6 +63,11 @@ input[type='text'] {
     margin-bottom: 20px;
 }
 
+#mailContentWrapper .ui-widget-header {
+    background: transparent;
+    border: none;
+}
+
 #htmlMainContent label{
     margin-bottom: 20px;
 }

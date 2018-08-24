@@ -91,34 +91,44 @@
                            value="{$subjectContent}">
                 </div>
 
-                <div id="mailContentWrapper" class="tabs">
-                    <input type="hidden" id="selectedTab" name="selectedTab" value="{if $isHtml}html{else}plain{/if}">
-                    <ul>
-                        <li><a href="#plainMainContentWrapper">{s namespace="blauband/mail" name="plainEmail"}{/s}</a></li>
-                        <li><a href="#htmlMainContentWrapper">{s namespace="blauband/mail" name="htmlEmail"}{/s}</a></li>
-                    </ul>
-                    <div data-type="plain" id="plainMainContentWrapper">
-                        <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-                        <textarea id="plainMailContent" name="plainMailContent">
-                            {$plainHeader|regex_replace:"/[\r\t\n]/":"&#10;"}
-                            &#10;
-                            {$bodyContent}
-                            &#10;
-                            {$plainFooter|regex_replace:"/[\r\t\n]/":"&#10;"}
-                        </textarea>
+                <div>
+                    <div class="two-cols">
+                        {block name="mailContentWrapper"}
+                            <div id="mailContentWrapper" class="tabs">
+                                <input type="hidden" id="selectedTab" name="selectedTab" value="{if $isHtml}html{else}plain{/if}">
+                                <ul>
+                                    <li><a href="#plainMainContentWrapper">{s namespace="blauband/mail" name="plainEmail"}{/s}</a></li>
+                                    <li><a href="#htmlMainContentWrapper">{s namespace="blauband/mail" name="htmlEmail"}{/s}</a></li>
+                                </ul>
+                                <div data-type="plain" id="plainMainContentWrapper">
+                                    <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
+                                    <textarea id="plainMailContent" name="plainMailContent">
+                                        {$plainHeader|regex_replace:"/[\r\t\n]/":"&#10;"}
+                                        &#10;
+                                        {$bodyContent}
+                                        &#10;
+                                        {$plainFooter|regex_replace:"/[\r\t\n]/":"&#10;"}
+                                    </textarea>
+                                </div>
+
+                                <div data-type="html" id="htmlMainContentWrapper">
+                                    <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
+                                    <div>
+                                        {$htmlHeader}
+                                    </div>
+                                    <textarea id="htmlMailContent" name="htmlMailContent">
+                                         {$bodyContent}
+                                    </textarea>
+                                    <div>
+                                        {$htmlFooter}
+                                    </div>
+                                </div>
+                            </div>
+                        {/block}
                     </div>
 
-                    <div data-type="html" id="htmlMainContentWrapper">
-                        <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-                        <div>
-                            {$htmlHeader}
-                        </div>
-                        <textarea id="htmlMailContent" name="htmlMailContent">
-                            {$bodyContent}
-                        </textarea>
-                        <div>
-                            {$htmlFooter}
-                        </div>
+                    <div class="two-cols">
+                        {block name="mailContentWrapperAdditional"}{/block}
                     </div>
                 </div>
             </div>
