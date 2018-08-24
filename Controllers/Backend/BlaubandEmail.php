@@ -196,8 +196,12 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $mailModel->setIsHtml($isHtml);
 
             $mail = $templateMail->createMail($mailModel, $this->request->getParams());
-            $mail->addTo($to);
-            $mail->addBcc($bcc);
+            $mail->addTo($to, $to);
+
+            if(!empty($bcc)){
+                $mail->addBcc($bcc);
+            }
+
             $mail->send();
 
             //Gerade erstellten eintrag ergänzen um weitere Daten
