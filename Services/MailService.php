@@ -31,6 +31,10 @@ class MailService
 
     public function saveMail(\Enlight_Components_Mail $mail)
     {
+        if($this->skipMail($mail)){
+            return;
+        }
+
         $this->findVariables();
 
         $bcc = array_diff($mail->getRecipients(), $mail->getTo());
@@ -97,10 +101,31 @@ class MailService
         if (isset($_POST['register']['personal']['email'])) {
             $this->setUserByEmail($_POST['register']['personal']['email']);
         }
+    }
 
-        if (isset($_POST['newsletter'])) {
-            $this->setUserByEmail($_POST['newsletter']);
+    public function skipMail(\Enlight_Components_Mail $mail){
+
+        if (isset($_POST['testmail'])) {
+            // Bei Testmails keine Speicherung
+            return true;
         }
+
+        // Bei Newsletter keine Speicherung
+        if (isset($_POST['newsletter'])) {
+            return true;
+        }
+
+        if (
+            strtolower($_GET['module']) == 'backend' &&
+            strtolower($_GET['controller']) == 'newsletter' &&
+            strtolower($_GET['action']) == 'cron'
+        ){
+            // Der Newsletter wird nicht über ein normlen CronJob gestartet sondern immer über eine URL.
+            // Deshalb ist dieser Weg erstmal ok
+            return true;
+        }
+
+        return false;
     }
 
     /**
