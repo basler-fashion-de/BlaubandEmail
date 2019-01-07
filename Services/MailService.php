@@ -4,6 +4,7 @@ namespace BlaubandEmail\Services;
 
 use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\CachedConfigReader;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Order\Order;
@@ -13,6 +14,9 @@ class MailService
 {
     /** @var ModelManager */
     private $modelManager;
+
+    /** @var CachedConfigReader */
+    private $cachedConfigReader;
 
     /** @var Order */
     protected $order = null;
@@ -24,14 +28,15 @@ class MailService
      * Mail constructor.
      * @param ModelManager $modelManager
      */
-    public function __construct(ModelManager $modelManager)
+    public function __construct(ModelManager $modelManager, CachedConfigReader $cachedConfigReader)
     {
         $this->modelManager = $modelManager;
+        $this->cachedConfigReader = $cachedConfigReader;
     }
 
     public function saveMail(\Enlight_Components_Mail $mail)
     {
-        if($this->skipMail($mail)){
+        if ($this->skipMail($mail)) {
             return;
         }
 
@@ -53,11 +58,11 @@ class MailService
             $mailModel->setIsHtml(true);
         }
 
-        if(null !== $this->order){
+        if (null !== $this->order) {
             $mailModel->setOrder($this->order);
         }
 
-        if(null !== $this->customer){
+        if (null !== $this->customer) {
             $mailModel->setCustomer($this->customer);
         }
 
@@ -103,27 +108,32 @@ class MailService
         }
     }
 
-    public function skipMail(\Enlight_Components_Mail $mail){
+    public function skipMail(\Enlight_Components_Mail $mail)
+    {
+        $config = $this->cachedConfigReader->getByPluginName('BlaubandEmail');
 
         if (isset($_POST['testmail'])) {
             // Bei Testmails keine Speicherung
             return true;
         }
 
-        // Bei Newsletter keine Speicherung
-        if (isset($_POST['newsletter'])) {
-            return true;
+        if(!$config['SAVE_NEWSLETTER_MAILS']){
+            // Bei Newsletter keine Speicherung
+            if (isset($_POST['newsletter'])) {
+                return true;
+            }
+
+            if (
+                strtolower($_GET['module']) == 'backend' &&
+                strtolower($_GET['controller']) == 'newsletter' &&
+                strtolower($_GET['action']) == 'cron'
+            ) {
+                // Der Newsletter wird nicht über ein normlen CronJob gestartet sondern immer über eine URL.
+                // Deshalb ist dieser Weg erstmal ok
+                return true;
+            }
         }
 
-        if (
-            strtolower($_GET['module']) == 'backend' &&
-            strtolower($_GET['controller']) == 'newsletter' &&
-            strtolower($_GET['action']) == 'cron'
-        ){
-            // Der Newsletter wird nicht über ein normlen CronJob gestartet sondern immer über eine URL.
-            // Deshalb ist dieser Weg erstmal ok
-            return true;
-        }
 
         return false;
     }

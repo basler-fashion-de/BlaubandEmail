@@ -16,5 +16,12 @@
             <label lang="en">Content text</label>
             <value>Hallo {$customer.firstname} {$customer.lastname},</value>
         </element>
+
+        <element required="true" type="boolean" scope="shop">
+            <name>SAVE_NEWSLETTER_MAILS</name>
+            <label lang="de">Newsletter E-Mails speichern</label>
+            <label lang="en">Save newsletter</label>
+            <value>0</value>
+        </element>
     </elements>
 </config>

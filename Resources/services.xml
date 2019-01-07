@@ -6,6 +6,7 @@
     <services>
         <service class="BlaubandEmail\Services\MailService" id="blauband_email.services.email_service">
             <argument id="models" type="service"/>
+            <argument id="shopware.plugin.cached_config_reader" type="service"/>
         </service>
 
         <service class="BlaubandEmail\Subscribers\ExtendCustomer" id="blauband_email.subscribers.extend_customer">

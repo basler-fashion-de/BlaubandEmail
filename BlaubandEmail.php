@@ -2,6 +2,7 @@
 
 namespace BlaubandEmail;
 
+use BlaubandEmail\Installers\Config;
 use BlaubandEmail\Installers\Mails;
 use BlaubandEmail\Services\ConfigService;
 use Shopware\Components\Plugin;
@@ -18,8 +19,8 @@ class BlaubandEmail extends Plugin
 {
 
     /**
-    * @param ContainerBuilder $container
-    */
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('blauband_email.plugin_dir', $this->getPath());
@@ -89,11 +90,19 @@ class BlaubandEmail extends Plugin
                 ))->update();
                 return true;
             },
+
+            '1.2.0' => function ($plugin, $oldVersion, $version, $newVersion) {
+                (new Config(
+                    $this->container->get('models'),
+                    (version_compare($oldVersion, $version, '<') && $oldVersion !== null)
+                ))->update();
+                return true;
+            },
         ];
 
         foreach ($versions as $version => $callback) {
             if ($oldVersion === null || (version_compare($oldVersion, $version, '<') && version_compare($version, $newVersion, '<='))) {
-                if (!$callback($this)) {
+                if (!$callback($this, $oldVersion, $version, $newVersion)) {
                     return false;
                 }
             }
