@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{link file="backend/_public/src/css/plugin.css"}">
 
 <script>
-    var sendSuccessSnippet = '{s namespace="blauband/mail" name="sendSuccess"}{/s}'
+  var sendSuccessSnippet = '{s namespace="blauband/mail" name="sendSuccess"}{/s}'
+  var newsletterSnippet = '{s namespace="blauband/mail" name="newsletter"}{/s}'
 </script>
 {/block}

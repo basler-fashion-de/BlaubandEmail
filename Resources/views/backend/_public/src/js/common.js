@@ -34,12 +34,13 @@ function showInfoPanel (text) {
   }
 }
 
-function openNewIframe (title, controller, action, params) {
+function openNewIframe (title, controller, action, params, additional) {
   var values = {
     component: 'customSubWindow',
     url: controller + '/' + action + '?' + jQuery.param(params),
     title: title
   }
+  jQuery.extend(values, additional);
   postMessageApi.createSubWindow(values)
 }
 

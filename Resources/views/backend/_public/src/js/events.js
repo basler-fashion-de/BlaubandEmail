@@ -1,6 +1,8 @@
 $(function () {
   registerEvents()
   registerElements()
+
+  showNewsletterPopup()
 })
 
 function registerElements () {
@@ -19,6 +21,23 @@ function registerEvents () {
   registerSendButton()
   registerExecuteSendButton()
 
+  registerNewsletterPopupEvents()
+}
+
+function showNewsletterPopup () {
+  setTimeout(function () {
+    if (typeof showNewsletter !== 'undefined' && showNewsletter === 1)
+      openNewIframe(
+        newsletterSnippet,
+        'BlaubandEmail',
+        'newsletter',
+        [],
+        {
+          width: 500,
+          height: 300
+        }
+      )
+  }, 1000)
 }
 
 function registerSendMailButton () {
@@ -79,5 +98,22 @@ function registerExecuteSendButton () {
         }
       }
     })
+  })
+}
+
+function registerNewsletterPopupEvents () {
+  $(
+    plugin_selector + ' #close-newsletter-popup-button, ' +
+    plugin_selector + ' #register-newsletter-popup-button'
+  ).on('click', function () {
+    $.ajax({
+      type: 'post',
+      url: location.href,
+      data: {newsletterShowed: 1},
+    })
+  })
+
+  $(plugin_selector + ' #close-newsletter-popup-button').on('click', function () {
+    postMessageApi.window.destroy();
   })
 }

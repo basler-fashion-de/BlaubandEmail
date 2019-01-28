@@ -18,20 +18,30 @@ class MailService
     /** @var CachedConfigReader */
     private $cachedConfigReader;
 
+    /** @var \Enlight_Controller_Front  */
+    private $frontProxy;
+
     /** @var Order */
     protected $order = null;
 
     /** @var User */
     protected $customer = null;
 
+    //If more orders (Batch)
+    private $orderCounter = 0;
+
     /**
      * Mail constructor.
      * @param ModelManager $modelManager
      */
-    public function __construct(ModelManager $modelManager, CachedConfigReader $cachedConfigReader)
+    public function __construct(
+        ModelManager $modelManager,
+        CachedConfigReader $cachedConfigReader,
+        \Enlight_Controller_Front $frontProxy)
     {
         $this->modelManager = $modelManager;
         $this->cachedConfigReader = $cachedConfigReader;
+        $this->frontProxy = $frontProxy;
     }
 
     public function saveMail(\Enlight_Components_Mail $mail)
@@ -103,6 +113,26 @@ class MailService
             }
         }
 
+        //BatchProcess (1 Order)
+        if (isset($_POST['number']) && $this->frontProxy->Request()->getActionName() == 'batchProcess') {
+            $this->setOrderByNumber($_POST['number']);
+            if (null !== $this->order) {
+                $this->customer = $this->order->getCustomer();
+                return;
+            }
+        }
+
+        //BatchProcess (Multiple Orders)
+        if(isset($_POST['orders'])){
+            $this->setOrderByNumber($_POST['orders'][$this->orderCounter]['number']);
+            $this->orderCounter++;
+            if (null !== $this->order) {
+                $this->customer = $this->order->getCustomer();
+                return;
+            }
+        }
+
+        //Registration
         if (isset($_POST['register']['personal']['email'])) {
             $this->setUserByEmail($_POST['register']['personal']['email']);
         }

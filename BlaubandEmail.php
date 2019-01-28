@@ -2,6 +2,7 @@
 
 namespace BlaubandEmail;
 
+use BlaubandEmail\Installers\Attributes;
 use BlaubandEmail\Installers\Config;
 use BlaubandEmail\Installers\Mails;
 use BlaubandEmail\Services\ConfigService;
@@ -43,6 +44,11 @@ class BlaubandEmail extends Plugin
     {
         if (!$context->keepUserData()) {
             (new Models($this->container->get('models')))->uninstall();
+
+            (new Attributes(
+                $this->container->get('shopware_attribute.crud_service'),
+                $this->container->get('models')
+            ))->uninstall();
         }
 
         parent::uninstall($context);
@@ -96,6 +102,12 @@ class BlaubandEmail extends Plugin
                     $this->container->get('models'),
                     (version_compare($oldVersion, $version, '<') && $oldVersion !== null)
                 ))->update();
+
+                (new Attributes(
+                    $this->container->get('shopware_attribute.crud_service'),
+                    $this->container->get('models')
+                ))->install();
+
                 return true;
             },
         ];

@@ -6,6 +6,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Mail\Mail;
+use Shopware\Models\User\User;
 
 class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -18,6 +19,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     /** @var Shopware_Components_TemplateMail $templateMail */
     private $templateMail;
 
+    private $auth;
+
 
     public function getWhitelistedCSRFActions()
     {
@@ -25,6 +28,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             'index',
             'send',
             'executeSend',
+            'newsletter'
         ];
     }
 
@@ -33,6 +37,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->modelManager = $this->container->get('models');
         $this->db = $this->container->get('dbal_connection');
         $this->templateMail = $this->container->get('TemplateMail');
+        $this->auth = $this->container->get('auth');
 
         $this->view->addTemplateDir(__DIR__ . "/../../Resources/views");
     }
@@ -65,6 +70,14 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $allMails = $repository->findBy($criteria, $orderBy, $limit, $offset);
         $total = $repository->findBy($criteria);
 
+        $authId = $this->auth->getIdentity()->id;
+        /** @var User $authModel */
+        $authModel = $this->modelManager->find(User::class, $authId);
+        $showNewsletter = (
+            $authModel->getAttribute() === null ||
+            !$authModel->getAttribute()->getBlaubandEmailNewsletter()
+        );
+
         $this->view->assign('isOwnFrame', $isOwnFrame);
         $this->view->assign('customerId', $customerId);
         $this->view->assign('orderId', $orderId);
@@ -72,6 +85,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->view->assign('offset', $offset);
         $this->view->assign('limit', $limit);
         $this->view->assign('total', $total);
+        $this->view->assign('newsletter', $showNewsletter);
     }
 
     public function sendAction()
@@ -215,6 +229,22 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Response()->setBody(json_encode($data));
         $this->Response()->setHeader('Content-type', 'application/json', true);
+    }
+
+    public function newsletterAction(){
+        $newsletterShowed = $this->request->getParam('newsletterShowed') === '1';
+
+        if($newsletterShowed){
+            $authId = $this->auth->getIdentity()->id;
+            /** @var User $authModel */
+            $authModel = $this->modelManager->find(User::class, $authId);
+            if(empty($authModel->getAttribute())){
+                $authModel->setAttribute(new \Shopware\Models\Attribute\User());
+            }
+
+            $authModel->getAttribute()->setBlaubandEmailNewsletter(1);
+            $this->modelManager->flush($authModel->getAttribute());
+        }
     }
 
     private function prepareRequestData(){

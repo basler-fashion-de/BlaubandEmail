@@ -9,11 +9,11 @@
     <link>www.blauband.com</link>
     <author>Blauband</author>
 
-    <compatibility minVersion="5.2.0" />
+    <compatibility minVersion="5.2.1" />
 
     <changelog version="1.2.0">
-        <changes lang="de">Vorbereitungen für Erweiterungen</changes>
-        <changes lang="en">Preparing for extensions</changes>
+        <changes lang="de"><![CDATA[Vorbereitung für Erweiterungen<br />Newsletter werden standardmäßig nicht mehr gespeichert (Option in Grundeinstellungen hinzugefügt)<br />E-Mails aus Stapelverarbeitung werden jetzt gespeichert]]></changes>
+        <changes lang="en"><![CDATA[Preparing for extensions<br />Newsletter will per default not be saved any more (can be switched on in Basic Settings)<br />emails from Batch Processing will now be saved]]></changes>
     </changelog>
 
     <changelog version="1.1.2">
@@ -22,13 +22,8 @@
     </changelog>
 
     <changelog version="1.1.1">
-        <changes lang="de">Bugfix: Behebt einige 'bad recipient address' Fehler</changes>
-        <changes lang="en">Bugfix: Fix bad recipient address errors</changes>
-    </changelog>
-
-    <changelog version="1.1.0">
-        <changes lang="de">Feature: HTML-Header können nun versendet werden</changes>
-        <changes lang="en">Feature: Now you can send also HTML-Header</changes>
+        <changes lang="de"><![CDATA[Bugfix: Behebt einige 'bad recipient address' Fehler<br /> Feature: HTML-Header können nun versendet werden]]></changes>
+        <changes lang="en"><![CDATA[Bugfix: Fix bad recipient address errors<br /> Feature: HTML header can now be sent]]></changes>
     </changelog>
 
     <changelog version="1.0.2">

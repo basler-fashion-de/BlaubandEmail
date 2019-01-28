@@ -6,8 +6,9 @@
             {include file="backend/blauband_common/header.tpl"}
 
             <script type="application/javascript">
-              var offset = {$offset}
-              var limit = {$limit}
+              var offset = '{$offset}'
+              var limit = '{$limit}'
+              var showNewsletter = '{$newsletter}'
             </script>
         </head>
     {/block}
@@ -15,7 +16,6 @@
         <body style="height: 100%">
         {block name="main-content"}
             <div id="blauband-mail">
-
                 {if $orderId}
                     <h2>{s namespace="blauband/mail" name="listOfMailsByOrder"}{/s}</h2>
                 {else}
