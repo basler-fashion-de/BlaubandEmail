@@ -132,20 +132,16 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $content = $stringCompiler->compileString($subjectTemplate, $templateContext);
         $this->view->assign('subjectContent', $content);
 
-        $plainFooter = $customerConfig->get('emailfooterplain');
-        $content = $stringCompiler->compileString($plainFooter, $templateContext);
+        $content = $stringCompiler->compileString('{include file="string:{config name=emailfooterplain}"}', $templateContext);
         $this->view->assign('plainFooter', $content);
 
-        $plainHeader = $customerConfig->get('emailheaderplain');
-        $content = $stringCompiler->compileString($plainHeader, $templateContext);
+        $content = $stringCompiler->compileString('{include file="string:{config name=emailheaderplain}"}', $templateContext);
         $this->view->assign('plainHeader', $content);
 
-        $htmlFooter = $customerConfig->get('emailfooterhtml');
-        $content = $stringCompiler->compileString($htmlFooter, $templateContext);
+        $content = $stringCompiler->compileString('{include file="string:{config name=emailfooterhtml}"}', $templateContext);
         $this->view->assign('htmlFooter', $content);
 
-        $htmlHeader = $customerConfig->get('emailheaderhtml');
-        $content = $stringCompiler->compileString($htmlHeader, $templateContext);
+        $content = $stringCompiler->compileString('{include file="string:{config name=emailheaderhtml}"}', $templateContext);
         $this->view->assign('htmlHeader', $content);
 
         $this->view->assign('shopName', $customerConfig->get('shopName'));
@@ -173,7 +169,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
             //Bei HTML Emails setzen wir zu Beginn und am Ende einen Zeilen Abstand
             $request->setParam('htmlMailContent',
-                '<br/>'. $request->getParam('htmlMailContent').'<br/>'
+                '<br/>' . $request->getParam('htmlMailContent') . '<br/>'
             );
 
             /* @var $mailModel \Shopware\Models\Mail\Mail */
@@ -185,7 +181,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $mail = $this->templateMail->createMail($mailModel, array_merge($request->getParams(), $templateContext));
             $mail->addTo($to, $to);
 
-            if(!empty($bcc)){
+            if (!empty($bcc)) {
                 $mail->addBcc($bcc);
             }
 
@@ -231,14 +227,15 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->Response()->setHeader('Content-type', 'application/json', true);
     }
 
-    public function newsletterAction(){
+    public function newsletterAction()
+    {
         $newsletterShowed = $this->request->getParam('newsletterShowed') === '1';
 
-        if($newsletterShowed){
+        if ($newsletterShowed) {
             $authId = $this->auth->getIdentity()->id;
             /** @var User $authModel */
             $authModel = $this->modelManager->find(User::class, $authId);
-            if(empty($authModel->getAttribute())){
+            if (empty($authModel->getAttribute())) {
                 $authModel->setAttribute(new \Shopware\Models\Attribute\User());
             }
 
@@ -247,11 +244,12 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         }
     }
 
-    private function prepareRequestData(){
+    private function prepareRequestData()
+    {
         $orderId = $this->request->getParam('orderId');
 
         $customerId = $this->request->getParam('customerId');
-        if(empty($customerId)){
+        if (empty($customerId)) {
             /** @var Order $o */
             $o = $this->modelManager->find(Order::class, $orderId);
             $customerId = $o->getCustomer()->getId();
@@ -262,6 +260,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
         /** @var Shop $customerShop */
         $customerShop = $this->modelManager->getRepository(Shop::class)->find($customerArray['subshopID']);
+        $customerShop->registerResources();
+        $this->view->addTemplateDir(__DIR__ . "/../../Resources/views"); //registerResources überschreibt alles
 
         /** @var Shopware_Components_Config $customerConfig */
         $customerConfig = $this->container->get('config');
@@ -270,8 +270,10 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         return [$orderId, $customerId, $customerArray, $customerShop, $customerConfig];
     }
 
-    private function getTemplateContext($customer, Shop $customerShop, $config, $orderId){
+    private function getTemplateContext($customer, Shop $customerShop, $config, $orderId)
+    {
         $templateContext = [
+            'sConfig' => Shopware()->Config(),
             'customer' => $customer,
             'shopName' => $config->get('shopName'),
             'sShopURL' => ($customerShop->getSecure() ? 'https://' : 'http://') . $customerShop->getHost() . $customerShop->getBaseUrl(),
