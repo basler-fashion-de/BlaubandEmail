@@ -5,6 +5,7 @@ namespace BlaubandEmail;
 use BlaubandEmail\Installers\Attributes;
 use BlaubandEmail\Installers\Config;
 use BlaubandEmail\Installers\Mails;
+use BlaubandEmail\Services\ChangeLogService;
 use BlaubandEmail\Services\ConfigService;
 use Shopware\Components\Plugin;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -38,6 +39,11 @@ class BlaubandEmail extends Plugin
     {
         $this->setup($context->getCurrentVersion(), $context->getUpdateVersion());
         parent::update($context);
+
+        /** @var ChangeLogService $changeLogService */
+        $changeLogService = $this->container->get('blauband_email.services.change_log_service');
+        $changeLogService->popUpChangeLogs($context, $context->getCurrentVersion());
+
     }
 
     public function uninstall(UninstallContext $context)
@@ -122,5 +128,4 @@ class BlaubandEmail extends Plugin
 
         return true;
     }
-
 }

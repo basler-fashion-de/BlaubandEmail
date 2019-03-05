@@ -4,10 +4,21 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- SERVICES -->
         <service class="BlaubandEmail\Services\MailService" id="blauband_email.services.email_service">
             <argument id="models" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
             <argument id="front" type="service"/>
+        </service>
+
+        <service class="BlaubandEmail\Services\ChangeLogService" id="blauband_email.services.change_log_service">
+            <argument id="blauband_email.plugin_config_service" type="service"/>
+        </service>
+
+
+        <!-- CONFIGS -->
+        <service class="BlaubandEmail\Services\ConfigService" id="blauband_email.plugin_config_service">
+            <argument>%blauband_email.plugin_dir%/plugin.xml</argument>
         </service>
 
         <service class="BlaubandEmail\Subscribers\ExtendCustomer" id="blauband_email.subscribers.extend_customer">

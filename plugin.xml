@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Blauband E-Mails (EKS)</label>
     <label lang="en">Blauband E-Mails (EKS)</label>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <copyright>(c) by Blauband GmbH</copyright>
     <license>proprietary</license>
     <link>www.blauband.com</link>
@@ -11,9 +11,16 @@
 
     <compatibility minVersion="5.2.1" />
 
+    <!-- Deutscher Changelog immer oben platzieren -->
+
+    <changelog version="1.2.1">
+        <changes lang="de">Verbesserte Kompalität mit Pickware</changes>
+        <changes lang="en">Improved compatibility with Pickware</changes>
+    </changelog>
+
     <changelog version="1.2.0">
-        <changes lang="de"><![CDATA[Vorbereitung für Erweiterungen<br />Newsletter werden standardmäßig nicht mehr gespeichert (Option in Grundeinstellungen hinzugefügt)<br />E-Mails aus Stapelverarbeitung werden jetzt gespeichert]]></changes>
-        <changes lang="en"><![CDATA[Preparing for extensions<br />Newsletter will per default not be saved any more (can be switched on in Basic Settings)<br />emails from Batch Processing will now be saved]]></changes>
+        <changes lang="de">Vorbereitung für Erweiterungen<![CDATA[<br/>]]>Newsletter werden standardmäßig nicht mehr gespeichert (Option in Grundeinstellungen hinzugefügt)<![CDATA[<br/>]]>E-Mails aus Stapelverarbeitung werden jetzt gespeichert</changes>
+        <changes lang="en">Preparing for extensions<![CDATA[<br/>]]>Newsletter will per default not be saved any more (can be switched on in Basic Settings)<![CDATA[<br/>]]>emails from Batch Processing will now be saved</changes>
     </changelog>
 
     <changelog version="1.1.2">
@@ -22,8 +29,8 @@
     </changelog>
 
     <changelog version="1.1.1">
-        <changes lang="de"><![CDATA[Bugfix: Behebt einige 'bad recipient address' Fehler<br /> Feature: HTML-Header können nun versendet werden]]></changes>
-        <changes lang="en"><![CDATA[Bugfix: Fix bad recipient address errors<br /> Feature: HTML header can now be sent]]></changes>
+        <changes lang="de">Bugfix: Behebt einige 'bad recipient address' Fehler<![CDATA[<br/>]]> Feature: HTML-Header können nun versendet werden</changes>
+        <changes lang="en">Bugfix: Fix bad recipient address errors<![CDATA[<br/>]]> Feature: HTML header can now be sent</changes>
     </changelog>
 
     <changelog version="1.0.2">
