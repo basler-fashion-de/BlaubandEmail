@@ -20,6 +20,7 @@ function registerEvents () {
   registerOpenOrderButton()
   registerSendButton()
   registerExecuteSendButton()
+  registerCloseAdButton()
 
   registerNewsletterPopupEvents()
 }
@@ -101,6 +102,21 @@ function registerExecuteSendButton () {
   })
 }
 
+function registerCloseAdButton () {
+  $(plugin_selector + ' .close-ad--button').on('click', function () {
+    var url = $(this).data('url')
+    var me = this
+
+    $.ajax({
+      type: 'post',
+      url: url,
+      success: function (response) {
+        $(me).parent().remove()
+      }
+    })
+  })
+}
+
 function registerNewsletterPopupEvents () {
   $(
     plugin_selector + ' #close-newsletter-popup-button, ' +
@@ -114,6 +130,6 @@ function registerNewsletterPopupEvents () {
   })
 
   $(plugin_selector + ' #close-newsletter-popup-button').on('click', function () {
-    postMessageApi.window.destroy();
+    postMessageApi.window.destroy()
   })
 }

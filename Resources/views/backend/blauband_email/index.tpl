@@ -16,6 +16,8 @@
         <body style="height: 100%">
         {block name="main-content"}
             <div id="blauband-mail">
+                {include file="backend/blauband_email/ad.tpl"}
+
                 {if $orderId}
                     <h2>{s namespace="blauband/mail" name="listOfMailsByOrder"}{/s}</h2>
                 {else}

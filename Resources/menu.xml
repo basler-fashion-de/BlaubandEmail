@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/menu.xsd">
+    <entries>
+        <entry>
+            <name>BlaubandStore</name>
+            <label lang="en">EKS-Module</label>
+            <label lang="de">EKS-Modules</label>
+            <controller>BlaubandEKS</controller>
+            <action>index</action>
+            <class>\" style=\"background: url('/custom/plugins/BlaubandEmail/plugin.png') no-repeat scroll 0 0 transparent !important;</class>
+            <parent identifiedBy="controller">ConfigurationMenu</parent>
+            <onclick>Shopware.ModuleManager.createSimplifiedModule("BlaubandStore", { "title": "EKS-Module"})</onclick>
+        </entry>
+    </entries>
+</menu>

@@ -39,6 +39,10 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->templateMail = $this->container->get('TemplateMail');
         $this->auth = $this->container->get('auth');
 
+        $adService = $this->container->get('blauband_email.services.ad_service');
+        $latestAdContent = $adService->getLatestAdContent();
+        $this->view->assign('adContent', $latestAdContent);
+
         $this->view->addTemplateDir(__DIR__ . "/../../Resources/views");
     }
 
@@ -242,6 +246,16 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $authModel->getAttribute()->setBlaubandEmailNewsletter(1);
             $this->modelManager->flush($authModel->getAttribute());
         }
+    }
+
+    public function writeLatestLockAction()
+    {
+        $adService = $this->container->get('blauband_email.services.ad_service');
+        $adService->writeLatestLock();
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Response()->setBody(json_encode(['success' => true]));
+        $this->Response()->setHeader('Content-type', 'application/json', true);
     }
 
     private function prepareRequestData()

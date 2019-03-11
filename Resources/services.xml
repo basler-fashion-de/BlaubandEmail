@@ -15,6 +15,14 @@
             <argument id="blauband_email.plugin_config_service" type="service"/>
         </service>
 
+        <service class="BlaubandEmail\Services\AdService" id="blauband_email.services.ad_service">
+        </service>
+
+        <service class="BlaubandEmail\Services\ShopwareStoreService" id="blauband_email.services.shopware_store_service">
+            <argument>%shopware.release.version%</argument>
+            <argument id="shopware_plugininstaller.plugin_service_view" type="service"/>
+        </service>
+
 
         <!-- CONFIGS -->
         <service class="BlaubandEmail\Services\ConfigService" id="blauband_email.plugin_config_service">
