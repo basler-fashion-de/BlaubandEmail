@@ -44,11 +44,17 @@ class Attributes
      */
     public function uninstall()
     {
-        $this->crudService->delete(
-            's_core_auth_attributes',
-            'blauband_email_newsletter',
-            true
-        );
+        try{
+            $this->crudService->delete(
+                's_core_auth_attributes',
+                'blauband_email_newsletter',
+                true
+            );
+        }catch (\Exception $e){
+            //Es gab Fälle in dem das deinstallieren nicht klappte.
+            //In Zukunft haben wir lieber Datenmüll als dass die Deinstallation nicht geht
+        }
+
     }
 
     /**
