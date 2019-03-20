@@ -14,7 +14,7 @@ class AdService
     {
         $contentUrl = $this->url . $this->contentPath;
         $xmlContent = file_get_contents($contentUrl);
-        $this->content = json_decode(json_encode((array)simplexml_load_string($xmlContent)), 1);
+        $this->content = simplexml_load_string($xmlContent);
     }
 
     public function getLatestAdContent()
@@ -22,20 +22,21 @@ class AdService
         $latestDate = $this->readLatestLock();
         $now = date($this->dateFormat);
         $returnContents = [];
-        $ads = $this->content['ad'];
+        $ads = $this->content->ad;
 
         if(!isset($ads[0])){
             $ads = [$ads];
         }
 
         foreach ($ads as $ad) {
+
             if (
-                $ad['availableFrom'] > $latestDate &&
-                $ad['availableFrom'] < $now &&
-                $ad['availableTo'] > $now &&
-                !isset($ad['test'])
+                $ad->availableFrom > $latestDate &&
+                $ad->availableFrom < $now &&
+                $ad->availableTo > $now &&
+                !isset($ad->test)
             ) {
-                $returnContents[$ad['availableFrom']] = $ad['content'];
+                $returnContents[(string) $ad->availableFrom] = (string) $ad->content;
             }
         }
 
