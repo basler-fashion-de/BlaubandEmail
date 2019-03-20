@@ -28,7 +28,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             'index',
             'send',
             'executeSend',
-            'newsletter'
+            'newsletter',
+            'writeLatestLock'
         ];
     }
 
