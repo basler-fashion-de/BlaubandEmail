@@ -76,8 +76,13 @@ input[type='text'] {
     width:100%;
 }
 
+.attachmentWrapper {
+    overflow: auto;
+}
+
 #addAttachment {
     margin-top: 10px;
+    float: right;
 }
 
 .headerFooterMailContent {

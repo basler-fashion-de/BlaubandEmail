@@ -74,6 +74,11 @@
 
                 <div>
                     <div class="two-cols">
+                        <label>{s namespace="blauband/mail" name="mailSubject"}{/s}</label>
+                        <input type="text" id="mailSubject" name="mailSubject"
+                               value="{$subjectContent}">
+                    </div>
+                    <div class="two-cols">
                         <label>{s namespace="blauband/mail" name="mailToBcc"}{/s}</label>
                         <select id="mailToBcc" name="mailToBcc">
                             <option value="">{s namespace="blauband/mail" name="noBcc"}{/s}</option>
@@ -82,13 +87,10 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="two-cols"></div>
                 </div>
 
                 <div>
-                    <label>{s namespace="blauband/mail" name="mailSubject"}{/s}</label>
-                    <input type="text" id="mailSubject" name="mailSubject"
-                           value="{$subjectContent}">
+
                 </div>
 
                 <div>
@@ -124,8 +126,9 @@
                                     </div>
                                 </div>
 
-                                <h4>{s namespace="blauband/mail" name="mailAttachments"}{/s}</h4>
-                                <button id="addAttachment">{s namespace="blauband/mail" name="addAttachment"}{/s}</button>
+                                <div class="attachmentWrapper">
+                                    <button id="addAttachment">{s namespace="blauband/mail" name="addAttachment"}{/s}</button>
+                                </div>
                             </div>
                         {/block}
                     </div>
