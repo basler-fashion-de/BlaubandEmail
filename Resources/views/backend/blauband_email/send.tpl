@@ -90,10 +90,6 @@
                 </div>
 
                 <div>
-
-                </div>
-
-                <div>
                     <div class="two-cols">
                         {block name="mailContentWrapper"}
                             <div id="mailContentWrapper" class="tabs">
