@@ -50,6 +50,11 @@ input[type='text'] {
     width: 100% !important;
 }
 
+input[type='text']:not(:disabled){
+    border: 1px solid #e1e1e1;
+    background-color: #ffffff !important;
+}
+
 #subject-input {
     width: 39%;
 }
