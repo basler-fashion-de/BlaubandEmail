@@ -19,7 +19,7 @@
         </service>
 
         <service class="BlaubandEmail\Services\ShopwareStoreService" id="blauband_email.services.shopware_store_service">
-            <argument>%shopware.release.version%</argument>
+            <argument id="service_container" type="service"/>
             <argument id="shopware_plugininstaller.plugin_service_view" type="service"/>
         </service>
 

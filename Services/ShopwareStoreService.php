@@ -14,11 +14,16 @@ class ShopwareStoreService
     /** @var PluginViewService */
     private $pluginViewService;
 
-    public function __construct($shopwareVersion, $pluginViewService)
+    public function __construct($container, $pluginViewService)
     {
-        $this->auth = Shopware()->Container()->get('auth');
-        $this->shopwareVersion = $shopwareVersion;
+        $this->auth = $container->get('auth');
         $this->pluginViewService = $pluginViewService;
+
+        if($container->hasParameter('shopware.release.version')){
+            $this->shopwareVersion = $container->getParameter('shopware.release.version');
+        }else{
+            $this->shopwareVersion = \Shopware::VERSION;
+        }
     }
 
     public function getPluginsBySearchTerm($searchTerm)
