@@ -56,7 +56,7 @@
                     </button>
                 </div>
 
-                <div>
+                <div class="cta-row">
                     <div class="two-cols">
                         <label>{s namespace="blauband/mail" name="mailTo"}{/s}</label>
                         <input type="hidden" id="mailTo" name="mailTo" value="{$toMailAddress}">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="cta-row">
                     <div class="two-cols">
                         <label>{s namespace="blauband/mail" name="mailSubject"}{/s}</label>
                         <input type="text" id="mailSubject" name="mailSubject"
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="cta-row">
                     <div class="two-cols">
                         {block name="mailContentWrapper"}
                             <div id="mailContentWrapper" class="tabs">

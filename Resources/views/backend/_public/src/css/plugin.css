@@ -168,4 +168,8 @@ input[type='text']:not(:disabled){
     right: 10px;
 }
 
+.cta-row {
+    overflow: hidden;
+}
+
 /*{/literal}*/
