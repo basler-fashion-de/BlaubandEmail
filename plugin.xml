@@ -3,15 +3,20 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Blauband E-Mails (EKS)</label>
     <label lang="en">Blauband E-Mails (EKS)</label>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <copyright>(c) by Blauband GmbH</copyright>
     <license>proprietary</license>
     <link>www.blauband.com</link>
     <author>Blauband</author>
 
-    <compatibility minVersion="5.2.1" />
+    <compatibility minVersion="5.2.7" />
 
     <!-- Deutscher Changelog immer oben platzieren -->
+
+    <changelog version="1.2.2">
+        <changes lang="de">Bugfix: Behebt CSRF Fehlermeldung beim versenden vom E-Mails</changes>
+        <changes lang="en">Bugfix: Fix problems with CSRF error messages</changes>
+    </changelog>
 
     <changelog version="1.2.1">
         <changes lang="de">Feature: Anhänge hinzugefügt</changes>

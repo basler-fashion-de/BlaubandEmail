@@ -5,6 +5,8 @@
         <head>
             {include file="backend/blauband_common/header.tpl"}
 
+            <script type="text/javascript" src="{link file="backend/base/frame/postmessage-api.js"}"></script>
+
             <script type="application/javascript">
               var offset = '{$offset}'
               var limit = '{$limit}'
