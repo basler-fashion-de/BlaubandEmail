@@ -83,8 +83,12 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             !$authModel->getAttribute()->getBlaubandEmailNewsletter()
         );
 
-        $this->view->assign('isOwnFrame', $isOwnFrame);
+        if(empty($customerId)){
+            $customerId = '-';
+        }
+
         $this->view->assign('customerId', $customerId);
+        $this->view->assign('isOwnFrame', $isOwnFrame);
         $this->view->assign('orderId', $orderId);
         $this->view->assign('mails', $allMails);
         $this->view->assign('offset', $offset);
@@ -275,7 +279,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $orderId = $this->request->getParam('orderId');
         $customerId = $this->request->getParam('customerId');
 
-        if (empty($customerId)) {
+        if (empty($customerId) || !is_numeric($customerId)) {
             /** @var Order $o */
             $o = $this->modelManager->find(Order::class, $orderId);
             $customerId = $o->getCustomer()->getId();

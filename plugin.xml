@@ -13,6 +13,11 @@
 
     <!-- Deutscher Changelog immer oben platzieren -->
 
+    <changelog version="1.2.3">
+        <changes lang="de">Bugfix: Behebt 'The identifier id is missing' Fehler</changes>
+        <changes lang="en">Bugfix: Fix 'The identifier id is missing' error</changes>
+    </changelog>
+
     <changelog version="1.2.2">
         <changes lang="de">Bugfix: Behebt CSRF Fehlermeldung beim versenden vom E-Mails</changes>
         <changes lang="en">Bugfix: Fix problems with CSRF error messages</changes>
