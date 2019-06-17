@@ -3,8 +3,8 @@
     <entries>
         <entry>
             <name>BlaubandStore</name>
-            <label lang="en">EKS-Module</label>
-            <label lang="de">EKS-Modules</label>
+            <label lang="en">EKS-Modules</label>
+            <label lang="de">EKS-Module</label>
             <controller>BlaubandEKS</controller>
             <action>index</action>
             <class>\" style=\"background: url('/custom/plugins/BlaubandEmail/plugin.png') no-repeat scroll 0 0 transparent !important;</class>

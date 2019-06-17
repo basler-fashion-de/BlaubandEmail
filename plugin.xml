@@ -19,13 +19,13 @@
     </changelog>
 
     <changelog version="1.2.2">
-        <changes lang="de">Bugfix: Behebt CSRF Fehlermeldung beim versenden vom E-Mails</changes>
-        <changes lang="en">Bugfix: Fix problems with CSRF error messages</changes>
+        <changes lang="de">Bugfix: Behebt CSRF Fehlermeldung beim Versenden vom E-Mails</changes>
+        <changes lang="en">Bugfix: Fixes problems with CSRF error messages</changes>
     </changelog>
 
     <changelog version="1.2.1">
-        <changes lang="de">Feature: Anhänge hinzugefügt</changes>
-        <changes lang="en">Feature: Add attachment</changes>
+        <changes lang="de">Feature: Anhänge verschicken<![CDATA[<br/>]]>Feature: Infobanner<![CDATA[<br/>]]>Kleinere Design Anpassungen</changes>
+        <changes lang="en">Feature: Send Attachments<![CDATA[<br/>]]>Feature: Info Banner<![CDATA[<br/>]]>Smaller Design Improvements</changes>
     </changelog>
 
     <changelog version="1.2.0">
