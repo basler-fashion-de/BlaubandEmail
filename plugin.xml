@@ -15,7 +15,7 @@
 
     <changelog version="1.2.3">
         <changes lang="de">Bugfix: Behebt 'The identifier id is missing' Fehler</changes>
-        <changes lang="en">Bugfix: Fix 'The identifier id is missing' error</changes>
+        <changes lang="en">Bugfix: Fixes 'The identifier id is missing' error</changes>
     </changelog>
 
     <changelog version="1.2.2">
