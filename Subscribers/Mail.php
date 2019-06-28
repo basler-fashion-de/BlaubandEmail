@@ -3,15 +3,16 @@
 namespace BlaubandEmail\Subscribers;
 
 use BlaubandEmail\Services\MailService;
+use BlaubandEmail\Services\MailServiceInterface;
 use Enlight\Event\SubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Mail implements SubscriberInterface
 {
-    /** @var MailService */
+    /** @var MailServiceInterface */
     private $mailService;
 
-    public function __construct(MailService $mailService)
+    public function __construct(MailServiceInterface $mailService)
     {
         $this->mailService = $mailService;
     }
@@ -39,7 +40,7 @@ class Mail implements SubscriberInterface
             $mail = $args->get('mail');
 
             if (isset($args->getSubject()->sOrderNumber)) {
-                $this->mailService->setOrderByNumber($args->getSubject()->sOrderNumber);
+                $_POST['orderNumber'] = $args->getSubject()->sOrderNumber;
             }
 
             $this->mailService->saveMail($mail);

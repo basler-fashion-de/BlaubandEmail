@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Blauband E-Mails (EKS)</label>
     <label lang="en">Blauband E-Mails (EKS)</label>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <copyright>(c) by Blauband GmbH</copyright>
     <license>proprietary</license>
     <link>www.blauband.com</link>
@@ -12,6 +12,12 @@
     <compatibility minVersion="5.2.7" />
 
     <!-- Deutscher Changelog immer oben platzieren -->
+
+
+    <changelog version="1.2.4">
+        <changes lang="de">Anpassungen: Plugin kann von Drittanbietern leichter angepasst werden</changes>
+        <changes lang="en">Changes: Improve extension support</changes>
+    </changelog>
 
     <changelog version="1.2.3">
         <changes lang="de">Bugfix: Behebt 'The identifier id is missing' Fehler</changes>

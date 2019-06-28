@@ -9,6 +9,7 @@
             <argument id="models" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
             <argument id="front" type="service"/>
+            <argument id="TemplateMail" type="service"/>
         </service>
 
         <service class="BlaubandEmail\Services\ChangeLogService" id="blauband_email.services.change_log_service">

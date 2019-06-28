@@ -6,11 +6,15 @@ use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\CachedConfigReader;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Order\Order;
 use Shopware\Models\User\User;
+use Shopware_Components_TemplateMail;
+use Zend_Mime;
+use Zend_Mime_Part;
 
-class MailService
+class MailService implements MailServiceInterface
 {
     /** @var ModelManager */
     private $modelManager;
@@ -18,8 +22,11 @@ class MailService
     /** @var CachedConfigReader */
     private $cachedConfigReader;
 
-    /** @var \Enlight_Controller_Front  */
+    /** @var \Enlight_Controller_Front */
     private $frontProxy;
+
+    /** @var Shopware_Components_TemplateMail $templateMail */
+    private $templateMail;
 
     /** @var Order */
     protected $order = null;
@@ -37,11 +44,15 @@ class MailService
     public function __construct(
         ModelManager $modelManager,
         CachedConfigReader $cachedConfigReader,
-        \Enlight_Controller_Front $frontProxy)
+        \Enlight_Controller_Front $frontProxy,
+        $templateMail
+    )
     {
         $this->modelManager = $modelManager;
         $this->cachedConfigReader = $cachedConfigReader;
         $this->frontProxy = $frontProxy;
+        $this->templateMail = $templateMail;
+
     }
 
     public function saveMail(\Enlight_Components_Mail $mail)
@@ -82,10 +93,37 @@ class MailService
         $this->modelManager->flush($mailModel);
     }
 
+    public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'blaubandMail')
+    {
+        /* @var $mailModel \Shopware\Models\Mail\Mail */
+        $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(['name' => $template]);
+        $mailModel->setIsHtml($isHtml);
+
+        $mail = $this->templateMail->createMail($mailModel, $context);
+        $mail->addTo($to, $to);
+
+        if (!empty($bcc)) {
+            $mail->addBcc($bcc);
+        }
+
+        foreach ($files as $file) {
+            $content = file_get_contents($file['tmp_name']);
+            $zendAttachment = new Zend_Mime_Part($content);
+            $zendAttachment->type = $file['type'];
+            $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+            $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
+            $zendAttachment->filename = $file['name'];
+
+            $mail->addAttachment($zendAttachment);
+        }
+
+        $mail->send();
+    }
+
     /**
      * This function try to define variables by POST or GET Parameter
      */
-    public function findVariables()
+    private function findVariables()
     {
         if (isset($_POST['documentId'])) {
             $dokument = $this->modelManager->find(Document::class, $_POST['documentId']);
@@ -125,7 +163,7 @@ class MailService
         }
 
         //BatchProcess (Multiple Orders)
-        if(isset($_POST['orders'])){
+        if (isset($_POST['orders'])) {
             $this->setOrderByNumber($_POST['orders'][$this->orderCounter]['number']);
             $this->orderCounter++;
             if (null !== $this->order) {
@@ -140,7 +178,7 @@ class MailService
         }
     }
 
-    public function skipMail(\Enlight_Components_Mail $mail)
+    private function skipMail(\Enlight_Components_Mail $mail)
     {
         $config = $this->cachedConfigReader->getByPluginName('BlaubandEmail');
 
@@ -149,7 +187,7 @@ class MailService
             return true;
         }
 
-        if(!$config['SAVE_NEWSLETTER_MAILS']){
+        if (!$config['SAVE_NEWSLETTER_MAILS']) {
             // Bei Newsletter keine Speicherung
             if (isset($_POST['newsletter'])) {
                 return true;
@@ -173,7 +211,7 @@ class MailService
     /**
      * @param $orderNumber
      */
-    public function setOrderByNumber($orderNumber)
+    private function setOrderByNumber($orderNumber)
     {
         $repo = $this->modelManager->getRepository(Order::class);
         $order = $repo->findBy(['number' => $orderNumber]);
@@ -188,7 +226,7 @@ class MailService
     /**
      * @param $customerEmail
      */
-    public function setUserByEmail($customerEmail)
+    private function setUserByEmail($customerEmail)
     {
         $repo = $this->modelManager->getRepository(Customer::class);
         $customer = $repo->findBy(['email' => $customerEmail]);
@@ -199,22 +237,4 @@ class MailService
             return;
         }
     }
-
-    /**
-     * @param Order $order
-     */
-    public function setOrder(Order $order)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * @param User $customer
-     */
-    public function setCustomer(User $customer)
-    {
-        $this->customer = $customer;
-    }
-
-
 }

@@ -5,7 +5,7 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
-use Shopware\Models\Mail\Mail;
+use BlaubandEmail\Services\MailService;
 use Shopware\Models\User\User;
 
 class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Action implements CSRFWhitelistAware
@@ -16,11 +16,10 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     /* @var $db \Doctrine\DBAL\Connection */
     private $db;
 
-    /** @var Shopware_Components_TemplateMail $templateMail */
-    private $templateMail;
-
     private $auth;
 
+    /** @var MailService */
+    private $mailService;
 
     public function getWhitelistedCSRFActions()
     {
@@ -37,8 +36,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     {
         $this->modelManager = $this->container->get('models');
         $this->db = $this->container->get('dbal_connection');
-        $this->templateMail = $this->container->get('TemplateMail');
         $this->auth = $this->container->get('auth');
+        $this->mailService = $this->container->get('blauband_email.services.email_service');
 
         $adService = $this->container->get('blauband_email.services.ad_service');
         $latestAdContent = $adService->getLatestAdContent();
@@ -83,7 +82,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             !$authModel->getAttribute()->getBlaubandEmailNewsletter()
         );
 
-        if(empty($customerId)){
+        if (empty($customerId)) {
             $customerId = '-';
         }
 
@@ -110,7 +109,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
         $owner = $customerConfig->get('masterdata::mail');
 
-        $currentUser = $this->container->get('auth')->getAdapter(0)->getResultRowObject('email');
+        $currentUser = $this->auth->getAdapter(0)->getResultRowObject('email');
         $currentUser = $currentUser->email;
 
         $users = $this->db->fetchAll(
@@ -181,31 +180,13 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 '<br/>' . $request->getParam('htmlMailContent') . '<br/>'
             );
 
-            /* @var $mailModel \Shopware\Models\Mail\Mail */
-            $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(
-                ['name' => 'blaubandMail']
+            $this->mailService->sendMail(
+                $to,
+                $bcc,
+                array_merge($request->getParams(), $templateContext),
+                $isHtml,
+                $_FILES
             );
-            $mailModel->setIsHtml($isHtml);
-
-            $mail = $this->templateMail->createMail($mailModel, array_merge($request->getParams(), $templateContext));
-            $mail->addTo($to, $to);
-
-            if (!empty($bcc)) {
-                $mail->addBcc($bcc);
-            }
-
-            foreach ($_FILES as $file) {
-                $content = file_get_contents($file['tmp_name']);
-                $zendAttachment = new Zend_Mime_Part($content);
-                $zendAttachment->type = $file['type'];
-                $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-                $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
-                $zendAttachment->filename = $file['name'];
-
-                $mail->addAttachment($zendAttachment);
-            }
-
-            $mail->send();
 
             //Gerade erstellten eintrag ergänzen um weitere Daten
             if ($request->getParam('orderId')) {
@@ -288,10 +269,12 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $customer = $this->db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customerArray = $customer[0];
 
+
         /** @var Shop $customerShop */
         $customerShop = $this->modelManager->getRepository(Shop::class)->find($customerArray['subshopID']);
+        $templateDirs = $this->view->Engine()->getTemplateDir();
         $customerShop->registerResources();
-        $this->view->addTemplateDir(__DIR__ . "/../../Resources/views"); //registerResources überschreibt alles
+        $this->view->Engine()->setTemplateDir($templateDirs); //registerResources überschreibt alles
 
         /** @var Shopware_Components_Config $customerConfig */
         $customerConfig = $this->container->get('config');
