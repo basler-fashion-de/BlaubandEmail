@@ -59,12 +59,21 @@ class ShopwareStoreService
 
     public function getEksPlugins()
     {
-        //Es fehlen noch EKS Plugins
+        $blacklist = [
+            'BlaubandEmail',
+        ];
+        $plugins = $this->getPluginsBySearchTerm('BlaubandEmail');
+
+        return $this->filterByBlackList($plugins, $blacklist);
     }
 
     public function getBlaubandPlugins()
     {
-        $blacklist = ['BlaubandEmail'];
+        $blacklist = [
+            'BlaubandEmail',
+            'BlaubandEmailSnippets',
+            'BlaubandEmailTemplate'
+        ];
         $plugins = $this->getPluginsBySearchTerm('Blauband');
 
         return $this->filterByBlackList($plugins, $blacklist);

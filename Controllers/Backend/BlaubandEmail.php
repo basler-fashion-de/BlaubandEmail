@@ -3,6 +3,7 @@
 use BlaubandEmail\Models\LoggedMail;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 use BlaubandEmail\Services\MailService;
@@ -21,6 +22,15 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     /** @var MailService */
     private $mailService;
 
+    /** @var \Shopware\Components\Plugin\CachedConfigReader */
+    private $configReader;
+
+    /** @var \BlaubandEmail\Services\AdService */
+    private $adService;
+
+    /** @var Shopware_Components_TemplateMail $templateMail */
+    private $templateMail;
+
     public function getWhitelistedCSRFActions()
     {
         return [
@@ -28,7 +38,9 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             'send',
             'executeSend',
             'newsletter',
-            'writeLatestLock'
+            'writeLatestLock',
+            'dokumentation',
+            'preview'
         ];
     }
 
@@ -38,10 +50,11 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->db = $this->container->get('dbal_connection');
         $this->auth = $this->container->get('auth');
         $this->mailService = $this->container->get('blauband_email.services.email_service');
+        $this->configReader = $this->container->get('shopware.plugin.cached_config_reader');
+        $this->adService = $this->container->get('blauband_email.services.ad_service');
+        $this->templateMail = $this->container->get('TemplateMail');
 
-        $adService = $this->container->get('blauband_email.services.ad_service');
-        $latestAdContent = $adService->getLatestAdContent();
-        $this->view->assign('adContent', $latestAdContent);
+        $this->view->assign('adContent', $this->adService->getLatestAdContent());
 
         $this->view->addTemplateDir(__DIR__ . "/../../Resources/views");
     }
@@ -99,7 +112,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
     public function sendAction()
     {
         /** @var array $pluginConfig */
-        $pluginConfig = $this->container->get('shopware.plugin.cached_config_reader')->getByPluginName('BlaubandEmail');
+        $pluginConfig = $this->configReader->getByPluginName('BlaubandEmail');
 
         /** @var Shopware_Components_StringCompiler $stringCompiler */
         $stringCompiler = new Shopware_Components_StringCompiler($this->view->Engine());
@@ -140,18 +153,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $content = $stringCompiler->compileString($subjectTemplate, $templateContext);
         $this->view->assign('subjectContent', $content);
 
-        $content = $stringCompiler->compileString('{include file="string:{config name=emailfooterplain}"}', $templateContext);
-        $this->view->assign('plainFooter', $content);
-
-        $content = $stringCompiler->compileString('{include file="string:{config name=emailheaderplain}"}', $templateContext);
-        $this->view->assign('plainHeader', $content);
-
-        $content = $stringCompiler->compileString('{include file="string:{config name=emailfooterhtml}"}', $templateContext);
-        $this->view->assign('htmlFooter', $content);
-
-        $content = $stringCompiler->compileString('{include file="string:{config name=emailheaderhtml}"}', $templateContext);
-        $this->view->assign('htmlHeader', $content);
-
         $this->view->assign('shopName', $customerConfig->get('shopName'));
         $this->view->assign('customerId', $customerId);
         $this->view->assign('orderId', $orderId);
@@ -174,11 +175,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             }
 
             $isHtml = $request->getParam('selectedTab') === 'html';
-
-            //Bei HTML Emails setzen wir zu Beginn und am Ende einen Zeilen Abstand
-            $request->setParam('htmlMailContent',
-                '<br/>' . $request->getParam('htmlMailContent') . '<br/>'
-            );
 
             $this->mailService->sendMail(
                 $to,
@@ -247,12 +243,35 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
     public function writeLatestLockAction()
     {
-        $adService = $this->container->get('blauband_email.services.ad_service');
-        $adService->writeLatestLock();
+        $this->adService->writeLatestLock();
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Response()->setBody(json_encode(['success' => true]));
         $this->Response()->setHeader('Content-type', 'application/json', true);
+    }
+
+    public function dokumentationAction()
+    {
+
+    }
+
+
+    public function previewAction()
+    {
+        $params = $this->request->getParams();
+        $isHtml = $params['selectedTab'] === 'html';
+
+        /* @var $mailModel \Shopware\Models\Mail\Mail */
+        $mailModel = $this->modelManager->find(Mail::class, $params['template']);
+        $mailModel->setIsHtml($isHtml);
+
+        $mail = $this->templateMail->createMail($mailModel, $params);
+
+        if($isHtml){
+            $this->View()->assign('preview', $mail->getBodyHtml()->getRawContent());
+        }else{
+            $this->View()->assign('preview', $mail->getBodyText()->getRawContent());
+        }
     }
 
     private function prepareRequestData()

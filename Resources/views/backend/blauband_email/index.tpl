@@ -21,9 +21,19 @@
                 {include file="backend/blauband_email/ad.tpl"}
 
                 {if $orderId}
-                    <h2>{s namespace="blauband/mail" name="listOfMailsByOrder"}{/s}</h2>
+                    <h2>
+                        {s namespace="blauband/mail" name="listOfMailsByOrder"}{/s}
+                        <button class="doku-button">
+                            <img src="{link file="backend/_public/src/images/doku.png"}" />
+                        </button>
+                    </h2>
                 {else}
-                    <h2>{s namespace="blauband/mail" name="listOfMails"}{/s}</h2>
+                    <h2>
+                        {s namespace="blauband/mail" name="listOfMails"}{/s}
+                        <button class="doku-button">
+                            <img src="{link file="backend/_public/src/images/doku.png"}" />
+                        </button>
+                    </h2>
                 {/if}
                 <hr/>
 

@@ -21,6 +21,8 @@ function registerEvents () {
   registerSendButton()
   registerExecuteSendButton()
   registerCloseAdButton()
+  registerDokuButton()
+  registerPreviewButton()
 
   registerNewsletterPopupEvents()
   registerAddAttachment()
@@ -82,16 +84,7 @@ function registerSendButton () {
 function registerExecuteSendButton () {
   $(plugin_selector + ' #execute-send-button').on('click', function () {
     var url = $(this).data('url')
-    var params = $('input, textarea, select')
-    var formData = new FormData()
-
-    $('.mail-attachment').each(function (i, el) {
-      formData.append('file' + i, this.files[0])
-    })
-
-    for (var i = 0; i < params.length; i++) {
-      formData.append(params[i].name, params[i].value)
-    }
+    var formData = fetchInputFormData();
 
     $.ajax({
       type: 'post',
@@ -104,8 +97,7 @@ function registerExecuteSendButton () {
         var jqXHR = null
         if (window.ActiveXObject) {
           jqXHR = new window.ActiveXObject('Microsoft.XMLHTTP')
-        }
-        else {
+        } else {
           jqXHR = new window.XMLHttpRequest()
         }
 
@@ -123,7 +115,7 @@ function registerExecuteSendButton () {
         }
       }
     })
-  });
+  })
 }
 
 function registerAddAttachment () {
@@ -146,6 +138,20 @@ function registerCloseAdButton () {
         $(me).parent().remove()
       }
     })
+  })
+}
+
+function registerDokuButton () {
+  $(plugin_selector + ' .doku-button').on('click', function () {
+    openNewIframe('Dokumentation', 'BlaubandEmail', 'dokumentation', {})
+  })
+}
+
+function registerPreviewButton () {
+  $(plugin_selector + ' #preview-button').on('click', function () {
+    var formData = fetchInput();
+
+    openNewIframe('Vorschau', 'BlaubandEmail', 'preview', formData);
   })
 }
 

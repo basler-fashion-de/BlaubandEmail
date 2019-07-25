@@ -43,7 +43,12 @@
                 <input type="hidden" id="shopName" name="shopName" value="{$shopName}">
 
 
-                <h2>{s namespace="blauband/mail" name="sendMailHeader"}{/s}</h2>
+                <h2>
+                    {s namespace="blauband/mail" name="sendMailHeader"}{/s}
+                    <button class="doku-button">
+                        <img src="{link file="backend/_public/src/images/doku.png"}" />
+                    </button>
+                </h2>
                 <hr/>
 
                 <div class="button-right-wrapper">
@@ -51,6 +56,9 @@
                         {s namespace="blauband/mail" name="back"}{/s}
                     </button>
 
+                    <button id="preview-button" class="blue">
+                        {s namespace="blauband/mail" name="preview"}{/s}
+                    </button>
                     <button id="execute-send-button" class="blue" data-url="{url action="executeSend"}">
                         {s namespace="blauband/mail" name="sendMail"}{/s}
                     </button>
@@ -101,25 +109,15 @@
                                 <div data-type="plain" id="plainMainContentWrapper">
                                     <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
                                     <textarea id="plainMailContent" name="plainMailContent">
-                                        {$plainHeader|regex_replace:"/[\r\t\n]/":"&#10;"}
-                                        &#10;
                                         {$bodyContent}
-                                        &#10;
-                                        {$plainFooter|regex_replace:"/[\r\t\n]/":"&#10;"}
                                     </textarea>
                                 </div>
 
                                 <div data-type="html" id="htmlMainContentWrapper">
                                     <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>
-                                    <div>
-                                        {$htmlHeader}
-                                    </div>
                                     <textarea id="htmlMailContent" name="htmlMailContent">
                                          {$bodyContent}
                                     </textarea>
-                                    <div>
-                                        {$htmlFooter}
-                                    </div>
                                 </div>
 
                                 <div class="attachmentWrapper">
