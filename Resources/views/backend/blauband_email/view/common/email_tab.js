@@ -12,19 +12,45 @@ Ext.define('Shopware.apps.BlaubandEmail.view.common.EmailTab', {
     var me = this;
     var url = '{url controller="BlaubandEmail"}/index/customerId/'+me.customerId+'/orderId/'+me.orderId;
     var instance = Shopware.ModuleManager.uuidGenerator.generate();
+    var frame = me.createPostMessageApiEnabledTabComponent('Email', url);
 
-    var frame = Shopware.ModuleManager.createContentFrame(
-      url,
-      instance,
-      true
-    );
-
-    me.items  =  [{
-      xtype: 'label',
-      html: frame.dom.outerHTML
-    }];
+    me.items  =  [frame];
 
     me.callParent(arguments);
+  },
+
+  createPostMessageApiEnabledTabComponent: function (label, url) {
+    var me = this,
+      swModuleManager = Shopware.ModuleManager,
+      instance = swModuleManager.uuidGenerator.generate(),
+      content = swModuleManager.createContentFrame(url, instance, true),
+      subApp = null,
+      windows = Ext.create('Ext.util.MixedCollection'),
+      contentWindow
+
+    contentWindow = Ext.create('Ext.Component', {
+      title: label,
+      component: 'main',
+      content: 'content',
+      listeners: {
+        render: function (component, eOpts) {
+          component.el.appendChild(content)
+          component.setLoading(true)
+        },
+      },
+    })
+
+    content.dom._window = contentWindow
+    windows.add('main', contentWindow)
+
+    swModuleManager.modules.add(instance, {
+      name: url,
+      instance: instance,
+      subApp: subApp,
+      windows: windows
+    })
+
+    return contentWindow
   }
 });
 

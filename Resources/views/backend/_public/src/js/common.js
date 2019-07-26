@@ -13,7 +13,7 @@ function showErrorPanel (text) {
     $(plugin_selector + ' .alerts .ui-state-error .content').text(text)
     $(plugin_selector + ' .alerts .ui-state-error').show()
 
-    if(hideErrorAfter){
+    if (hideErrorAfter) {
       setTimeout(function () {
         hideErrorPanel()
       }, hideErrorAfter)
@@ -26,7 +26,7 @@ function showInfoPanel (text) {
     $(plugin_selector + ' .alerts .ui-state-highlight .content').text(text)
     $(plugin_selector + ' .alerts .ui-state-highlight').show()
 
-    if(hideErrorAfter){
+    if (hideErrorAfter) {
       setTimeout(function () {
         hideInfoPanel()
       }, hideErrorAfter)
@@ -40,7 +40,7 @@ function openNewIframe (title, controller, action, params, additional) {
     url: controller + '/' + action + '?' + jQuery.param(params),
     title: title
   }
-  jQuery.extend(values, additional);
+  jQuery.extend(values, additional)
   postMessageApi.createSubWindow(values)
 }
 
