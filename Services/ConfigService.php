@@ -16,7 +16,7 @@ class ConfigService
             $this->data = include $path;
         }else{
             $configData = file_get_contents($path);
-            $this->data = json_decode(json_encode((array)simplexml_load_string($configData)),1);
+            $this->data = json_decode(json_encode((array)simplexml_load_string($configData, 'SimpleXMLElement', LIBXML_NOCDATA)),1);
         }
     }
 
