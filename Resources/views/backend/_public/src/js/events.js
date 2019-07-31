@@ -21,8 +21,8 @@ function registerEvents () {
   registerSendButton()
   registerExecuteSendButton()
   registerCloseAdButton()
-  registerDokuButton()
   registerPreviewButton()
+  registerPreviewSendButton()
 
   registerNewsletterPopupEvents()
   registerAddAttachment()
@@ -141,17 +141,18 @@ function registerCloseAdButton () {
   })
 }
 
-function registerDokuButton () {
-  $(plugin_selector + ' .doku-button').on('click', function () {
-    openNewIframe('Dokumentation', 'BlaubandEmail', 'dokumentation', {})
-  })
-}
-
 function registerPreviewButton () {
   $(plugin_selector + ' #preview-button').on('click', function () {
     var formData = fetchInput();
 
     openNewIframe('Vorschau', 'BlaubandEmail', 'preview', formData);
+  })
+}
+
+function registerPreviewSendButton () {
+  $(plugin_selector + ' #preview-send-button').on('click', function () {
+    parent[parent.length-2].document.getElementById('execute-send-button').click()
+    postMessageApi.window.destroy()
   })
 }
 

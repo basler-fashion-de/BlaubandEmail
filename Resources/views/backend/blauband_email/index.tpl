@@ -20,21 +20,15 @@
             <div id="blauband-mail">
                 {include file="backend/blauband_email/ad.tpl"}
 
-                {if $orderId}
-                    <h2>
+                <h2>
+                    {if $orderId}
                         {s namespace="blauband/mail" name="listOfMailsByOrder"}{/s}
-                        <button class="doku-button">
-                            <img src="{link file="backend/_public/src/images/doku.png"}" />
-                        </button>
-                    </h2>
-                {else}
-                    <h2>
+                    {else}
                         {s namespace="blauband/mail" name="listOfMails"}{/s}
-                        <button class="doku-button">
-                            <img src="{link file="backend/_public/src/images/doku.png"}" />
-                        </button>
-                    </h2>
-                {/if}
+                    {/if}
+                    {include file="backend/blauband_email/components/dokumentation-button.tpl"}
+                </h2>
+
                 <hr/>
 
                 <button id="send-mail-button" class="blue"

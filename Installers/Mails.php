@@ -75,7 +75,7 @@ class Mails
         $this->modelManager->flush();
     }
 
-    private function setMailModelData(&$mailModel, $data){
+    private function setMailModelData(Mail $mailModel, $data){
         $mailModel->setName($data['name']);
         $mailModel->setFromMail($data['fromMail']);
         $mailModel->setFromName($data['fromName']);

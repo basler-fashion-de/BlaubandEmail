@@ -32,6 +32,7 @@ Ext.define('Shopware.apps.BlaubandEmail.view.common.EmailTab', {
       title: label,
       component: 'main',
       content: 'content',
+      style: 'height: 100%',
       listeners: {
         render: function (component, eOpts) {
           component.el.appendChild(content)

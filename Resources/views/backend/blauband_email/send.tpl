@@ -42,12 +42,9 @@
                 <input type="hidden" id="orderId" name="orderId" value="{$orderId}">
                 <input type="hidden" id="shopName" name="shopName" value="{$shopName}">
 
-
                 <h2>
                     {s namespace="blauband/mail" name="sendMailHeader"}{/s}
-                    <button class="doku-button">
-                        <img src="{link file="backend/_public/src/images/doku.png"}" />
-                    </button>
+                    {include file="backend/blauband_email/components/dokumentation-button.tpl"}
                 </h2>
                 <hr/>
 

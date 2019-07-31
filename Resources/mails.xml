@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <mails>
-        <name>blaubandMail</name>
+        <name>Blauband Mail</name>
         <fromMail>{$mailFrom}</fromMail>
         <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
@@ -13,6 +13,6 @@
         <plainContent>
 {$plainMailContent|trim}
         </plainContent>
-        <isHtml>false</isHtml>
+        <isHtml>true</isHtml>
     </mails>
 </config>

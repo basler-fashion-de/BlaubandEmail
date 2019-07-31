@@ -250,12 +250,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->Response()->setHeader('Content-type', 'application/json', true);
     }
 
-    public function dokumentationAction()
-    {
-
-    }
-
-
     public function previewAction()
     {
         $params = $this->request->getParams();
@@ -317,7 +311,13 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 ['id' => $orderId]
             );
 
+            $orderDetails = $this->db->fetchAll(
+                "SELECT * FROM s_order_details WHERE orderID = :id",
+                ['id' => $orderId]
+            );
+
             $templateContext['order'] = $order[0];
+            $templateContext['order']['details'] = $orderDetails;
         }
 
         return $templateContext;
