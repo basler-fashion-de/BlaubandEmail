@@ -117,8 +117,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         /** @var Shopware_Components_StringCompiler $stringCompiler */
         $stringCompiler = new Shopware_Components_StringCompiler($this->view->Engine());
 
-        list($orderId, $customerId, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
-        $templateContext = $this->getTemplateContext($customerArray, $customerShop, $customerConfig, $orderId);
+        list($orderArray, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
+        $templateContext = $this->getTemplateContext($orderArray, $customerArray, $customerShop, $customerConfig);
 
         $owner = $customerConfig->get('masterdata::mail');
 
@@ -154,17 +154,18 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->view->assign('subjectContent', $content);
 
         $this->view->assign('shopName', $customerConfig->get('shopName'));
-        $this->view->assign('customerId', $customerId);
-        $this->view->assign('orderId', $orderId);
+        $this->view->assign('customerId', $customerArray['id']);
+        $this->view->assign('orderId', $orderArray['id']);
     }
 
     public function executeSendAction()
     {
         try {
             $request = $this->request;
+            $params = $this->request->getParams();
 
-            list($orderId, $customerId, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
-            $templateContext = $this->getTemplateContext($customerArray, $customerShop, $customerConfig, $orderId);
+            list($orderArray, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
+            $templateContext = $this->getTemplateContext($orderArray, $customerArray, $customerShop, $customerConfig);
 
             $to = $request->getParam('mailTo');
 
@@ -179,7 +180,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
             $this->mailService->sendMail(
                 $to,
                 $bcc,
-                array_merge($request->getParams(), $templateContext),
+                array_merge($params, $templateContext),
                 $isHtml,
                 $_FILES
             );
@@ -259,12 +260,15 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $mailModel = $this->modelManager->find(Mail::class, $params['template']);
         $mailModel->setIsHtml($isHtml);
 
-        $mail = $this->templateMail->createMail($mailModel, $params);
+        list($orderArray, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
+        $templateContext = $this->getTemplateContext($orderArray, $customerArray, $customerShop, $customerConfig);
 
-        if($isHtml){
+        $mail = $this->templateMail->createMail($mailModel, array_merge($params, $templateContext));
+
+        if ($isHtml) {
             $this->View()->assign('preview', $mail->getBodyHtml()->getRawContent());
-        }else{
-            $this->View()->assign('preview', $mail->getBodyText()->getRawContent());
+        } else {
+            $this->View()->assign('preview', nl2br($mail->getBodyText()->getRawContent()));
         }
     }
 
@@ -282,29 +286,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $customer = $this->db->fetchAll('SELECT * FROM s_user WHERE id = :id', ['id' => $customerId]);
         $customerArray = $customer[0];
 
-
-        /** @var Shop $customerShop */
-        $customerShop = $this->modelManager->getRepository(Shop::class)->find($customerArray['subshopID']);
-        $templateDirs = $this->view->Engine()->getTemplateDir();
-        $customerShop->registerResources();
-        $this->view->Engine()->setTemplateDir($templateDirs); //registerResources überschreibt alles
-
-        /** @var Shopware_Components_Config $customerConfig */
-        $customerConfig = $this->container->get('config');
-        $customerConfig->setShop($customerShop);
-
-        return [$orderId, $customerId, $customerArray, $customerShop, $customerConfig];
-    }
-
-    private function getTemplateContext($customer, Shop $customerShop, $config, $orderId)
-    {
-        $templateContext = [
-            'sConfig' => Shopware()->Config(),
-            'customer' => $customer,
-            'shopName' => $config->get('shopName'),
-            'sShopURL' => ($customerShop->getSecure() ? 'https://' : 'http://') . $customerShop->getHost() . $customerShop->getBaseUrl(),
-        ];
-
+        $orderArray = [];
         if (!empty($orderId)) {
             $order = $this->db->fetchAll(
                 "SELECT * FROM s_order WHERE id = :id",
@@ -316,9 +298,34 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 ['id' => $orderId]
             );
 
-            $templateContext['order'] = $order[0];
-            $templateContext['order']['details'] = $orderDetails;
+            $orderArray = $order[0];
+            $orderArray['details'] = $orderDetails;
         }
+
+
+        /** @var Shop $customerShop */
+        $customerShop = $this->modelManager->getRepository(Shop::class)->find($customerArray['subshopID']);
+        $templateDirs = $this->view->Engine()->getTemplateDir();
+        $customerShop->registerResources();
+        $this->view->Engine()->setTemplateDir($templateDirs); //registerResources überschreibt alles
+
+        /** @var Shopware_Components_Config $customerConfig */
+        $customerConfig = $this->container->get('config');
+        $customerConfig->setShop($customerShop);
+
+        return [$orderArray, $customerArray, $customerShop, $customerConfig];
+    }
+
+    private function getTemplateContext($order, $customer, Shop $customerShop, $config)
+    {
+        $templateContext = [
+            'sConfig' => Shopware()->Config(),
+            'customer' => $customer,
+            'order' => $order,
+            'currency' => $customerShop->getCurrency()->getSymbol(),
+            'shopName' => $config->get('shopName'),
+            'sShopURL' => ($customerShop->getSecure() ? 'https://' : 'http://') . $customerShop->getHost() . $customerShop->getBaseUrl(),
+        ];
 
         return $templateContext;
     }
