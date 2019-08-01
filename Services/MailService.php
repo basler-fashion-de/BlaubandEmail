@@ -55,6 +55,11 @@ class MailService implements MailServiceInterface
 
     }
 
+    /**
+     * @param \Enlight_Components_Mail $mail
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
     public function saveMail(\Enlight_Components_Mail $mail)
     {
         if ($this->skipMail($mail)) {
@@ -88,6 +93,14 @@ class MailService implements MailServiceInterface
         }
 
         $mailModel->setAttachments(json_encode($mail->getParts()));
+
+        if(
+            empty($mailModel->getTo()) &&
+            empty($mailModel->getSubject()) &&
+            empty($mailModel->getBody())
+        ){
+            throw new \Exception('Missing Parameter');
+        }
 
         $this->modelManager->persist($mailModel);
         $this->modelManager->flush($mailModel);

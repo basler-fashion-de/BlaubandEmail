@@ -24,7 +24,7 @@ class LoggedMail extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="from_mail", type="string")
+     * @ORM\Column(name="from_mail", type="string", nullable=true)
      */
     private $from;
 
@@ -38,7 +38,7 @@ class LoggedMail extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="bcc_mail", type="string")
+     * @ORM\Column(name="bcc_mail", type="string", nullable=true)
      */
     private $bcc;
 
@@ -59,14 +59,14 @@ class LoggedMail extends ModelEntity
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_html", type="boolean")
+     * @ORM\Column(name="is_html", type="boolean", nullable=true)
      */
     private $isHtml;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="attachments", type="text")
+     * @ORM\Column(name="attachments", type="text", nullable=true)
      */
     private $attachments;
 
