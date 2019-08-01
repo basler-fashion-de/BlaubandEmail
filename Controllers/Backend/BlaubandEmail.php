@@ -1,6 +1,7 @@
 <?php
 
 use BlaubandEmail\Models\LoggedMail;
+use BlaubandEmail\Services\ConfigService;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Mail;
@@ -256,8 +257,24 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $params = $this->request->getParams();
         $isHtml = $params['selectedTab'] === 'html';
 
-        /* @var $mailModel \Shopware\Models\Mail\Mail */
-        $mailModel = $this->modelManager->find(Mail::class, $params['template']);
+        if (isset($params['template'])) {
+            /* @var $mailModel \Shopware\Models\Mail\Mail */
+            $mailModel = $this->modelManager->find(Mail::class, $params['template']);
+        } else {
+            $filesConfigService = new ConfigService(__DIR__ . '/../../Resources/mails.xml');
+            $mails = $filesConfigService->get('mails', true);
+            $repository = $this->modelManager->getRepository(Mail::class);
+
+            foreach ($mails as $mail) {
+                $mailModel = $repository->findOneBy(['name' => $mail['name']]);
+            }
+
+            if (empty($mailModel)) {
+                $this->View()->assign('preview', 'Kein EmailTemplate gefunden. Installieren Sie das Plugin erneut');
+                return;
+            }
+        }
+
         $mailModel->setIsHtml($isHtml);
 
         list($orderArray, $customerArray, $customerShop, $customerConfig) = $this->prepareRequestData();
