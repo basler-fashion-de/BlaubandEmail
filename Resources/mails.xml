@@ -6,12 +6,9 @@
         <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
         <htmlContent>
-            <div style="font-family:arial; font-size:12px;">
             {include file="string:{config name=emailheaderhtml}"}
-            <p>{$htmlMailContent|nl2br}</p>
-            <p>{include file="string:{config name=emailfooterhtml}"}
-                </p>
-            </div>
+            {$htmlMailContent|nl2br}
+            {include file="string:{config name=emailfooterhtml}"}
         </htmlContent>
         <plainContent>
 {$plainMailContent|trim}
