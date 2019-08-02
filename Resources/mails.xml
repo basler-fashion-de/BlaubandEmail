@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <mails>
-        <name>Blauband Mail</name>
+        <name>EKS-Template</name>
         <fromMail>{$mailFrom}</fromMail>
         <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
         <htmlContent>
+            <div style="font-family:arial; font-size:12px;">
             {include file="string:{config name=emailheaderhtml}"}
-            {$htmlMailContent|nl2br}
-            {include file="string:{config name=emailfooterhtml}"}
+            <p>{$htmlMailContent|nl2br}</p>
+            <p>{include file="string:{config name=emailfooterhtml}"}
+                </p>
+            </div>
         </htmlContent>
         <plainContent>
 {$plainMailContent|trim}
