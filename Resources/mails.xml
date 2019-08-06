@@ -6,9 +6,14 @@
         <fromName>{$shopName}</fromName>
         <subject>{$mailSubject}</subject>
         <htmlContent>
-            {include file="string:{config name=emailheaderhtml}"}
-            {$htmlMailContent|nl2br}
-            {include file="string:{config name=emailfooterhtml}"}
+<![CDATA[<div style="font-family:arial; font-size:12px;">
+{include file="string:{config name=emailheaderhtml}"}
+<br/><br/>
+<p>
+{$htmlMailContent|nl2br}
+</p>
+{include file="string:{config name=emailfooterhtml}"}
+</div>]]>
         </htmlContent>
         <plainContent>
 {include file="string:{config name=emailheaderplain}"}
