@@ -11,7 +11,11 @@
             {include file="string:{config name=emailfooterhtml}"}
         </htmlContent>
         <plainContent>
+{include file="string:{config name=emailheaderplain}"}
+            
 {$plainMailContent|trim}
+
+{include file="string:{config name=emailfooterplain}"}
         </plainContent>
         <isHtml>true</isHtml>
     </mails>
