@@ -106,7 +106,7 @@ class MailService implements MailServiceInterface
         $this->modelManager->flush($mailModel);
     }
 
-    public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'blaubandMail')
+    public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'EKS-Template')
     {
         /* @var $mailModel \Shopware\Models\Mail\Mail */
         $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(['name' => $template]);
