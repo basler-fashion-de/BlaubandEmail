@@ -15,8 +15,8 @@
 
 
     <changelog version="1.2.4">
-        <changes lang="de">Neue Funktion: Vorschaufenster und Hilfebutton.<![CDATA[<br/>]]>Bugfix: Kompatibilität mit Pickware ERP</changes>
-        <changes lang="en">New feature: preview window and help-button.<![CDATA[<br/>]]>Bugfix: Compatibility with Pickware ERP</changes>
+        <changes lang="de">Neue Funktionen: Vorschaufenster, eigenes E-Mail-Template, Hilfebutton.<![CDATA[<br/>]]>Bugfix: Kompatibilität mit Pickware ERP</changes>
+        <changes lang="en">New features: preview, e-mail-template, help-button.<![CDATA[<br/>]]>Bugfix: Compatibility with Pickware ERP</changes>
     </changelog>
 
     <changelog version="1.2.3">
