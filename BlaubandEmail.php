@@ -29,12 +29,18 @@ class BlaubandEmail extends Plugin
         parent::build($container);
     }
 
+    /**
+     * @param InstallContext $context
+     */
     public function install(InstallContext $context)
     {
         $this->setup(null, $context->getCurrentVersion());
         parent::install($context);
     }
 
+    /**
+     * @param UpdateContext $context
+     */
     public function update(UpdateContext $context)
     {
         $this->setup($context->getCurrentVersion(), $context->getUpdateVersion());
@@ -46,6 +52,9 @@ class BlaubandEmail extends Plugin
 
     }
 
+    /**
+     * @param UninstallContext $context
+     */
     public function uninstall(UninstallContext $context)
     {
         if (!$context->keepUserData()) {
@@ -117,6 +126,10 @@ class BlaubandEmail extends Plugin
             },
 
             '1.2.1' => function(){
+                (new Models($this->container->get('models')))->update();
+            },
+
+            '1.2.5' => function() {
                 (new Models($this->container->get('models')))->update();
             }
         ];

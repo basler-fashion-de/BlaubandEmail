@@ -94,11 +94,11 @@ class MailService implements MailServiceInterface
 
         $mailModel->setAttachments(json_encode($mail->getParts()));
 
-        if(
+        if (
             empty($mailModel->getTo()) &&
             empty($mailModel->getSubject()) &&
             empty($mailModel->getBody())
-        ){
+        ) {
             throw new \Exception('Missing Parameter');
         }
 
@@ -106,6 +106,15 @@ class MailService implements MailServiceInterface
         $this->modelManager->flush($mailModel);
     }
 
+    /**
+     * @param $to
+     * @param $bcc
+     * @param $context
+     * @param $isHtml
+     * @param array $files
+     * @param string $template
+     * @throws \Enlight_Exception
+     */
     public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'EKS-Template')
     {
         /* @var $mailModel \Shopware\Models\Mail\Mail */
