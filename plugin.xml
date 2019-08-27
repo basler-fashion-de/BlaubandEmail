@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Blauband E-Mails (EKS)</label>
     <label lang="en">Blauband E-Mails (EKS)</label>
-    <version>1.2.5</version>
+    <version>1.2.4</version>
     <copyright>(c) by Blauband GmbH</copyright>
     <license>proprietary</license>
     <link>www.blauband.com</link>
@@ -13,14 +13,9 @@
 
     <!-- Deutscher Changelog immer oben platzieren -->
 
-    <changelog version="1.2.5">
-        <changes lang="de">Bugfix: Behebt Fehler bei E-Mails ohne Absender</changes>
-        <changes lang="en">Bugfix: Fixes error in case of e-mails without sender</changes>
-    </changelog>
-
     <changelog version="1.2.4">
-        <changes lang="de">Neue Funktionen: Vorschaufenster, eigenes E-Mail-Template, Hilfebutton.<![CDATA[<br/>]]>Bugfix: Kompatibilität mit Pickware ERP</changes>
-        <changes lang="en">New features: preview, e-mail-template, help-button.<![CDATA[<br/>]]>Bugfix: Compatibility with Pickware ERP</changes>
+        <changes lang="de">Neue Funktionen: Vorschaufenster, eigenes E-Mail-Template, Hilfebutton.<![CDATA[<br/>]]>Bugfix: Behebt Fehler bei E-Mails ohne Absender (Kompatibilität mit Pickware ERP)</changes>
+        <changes lang="en">New features: preview, e-mail-template, help-button.<![CDATA[<br/>]]>Bugfix: Fixes error in case of e-mails without sender (compatibility with Pickware ERP)</changes>
     </changelog>
 
     <changelog version="1.2.3">
