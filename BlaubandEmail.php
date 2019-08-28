@@ -129,7 +129,7 @@ class BlaubandEmail extends Plugin
                 (new Models($this->container->get('models')))->update();
             },
 
-            '1.2.5' => function() {
+            '1.2.4' => function() {
                 (new Models($this->container->get('models')))->update();
             }
         ];
