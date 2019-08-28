@@ -115,7 +115,7 @@ class MailService implements MailServiceInterface
      * @param string $template
      * @throws \Enlight_Exception
      */
-    public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'EKS-Template')
+    public function sendMail($to, $bcc, $context, $isHtml, $files = [], $template = 'blaubandMail')
     {
         /* @var $mailModel \Shopware\Models\Mail\Mail */
         $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(['name' => $template]);
