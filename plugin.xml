@@ -15,8 +15,8 @@
 
 
     <changelog version="1.2.5">
-        <changes lang="de">Anpassungen: Kleinere Design Anpassungen</changes>
-        <changes lang="en">Changes: Small design changes</changes>
+        <changes lang="de">Anpassungen: Kleinere Design Anpassungen und Variablen-Erweiterung (Relevant für Blauband EKS Templates)</changes>
+        <changes lang="en">Changes: Small design changes and additional variables (Relevant to Blauband EKS Templates)</changes>
     </changelog>
 
     <changelog version="1.2.4">

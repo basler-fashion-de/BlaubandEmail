@@ -315,8 +315,26 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
                 ['id' => $orderId]
             );
 
+            $orderShipping = $this->db->fetchAll(
+                "SELECT * FROM s_order_shippingaddress WHERE orderID = :id",
+                ['id' => $orderId]
+            );
+
+            $orderBilling = $this->db->fetchAll(
+                "SELECT * FROM s_order_billingaddress WHERE orderID = :id",
+                ['id' => $orderId]
+            );
+
+            $payment = $this->db->fetchAll(
+                "SELECT * FROM s_core_paymentmeans WHERE id = :paymentId",
+                ['paymentId' => $order[0]['paymentID']]
+            );
+
             $orderArray = $order[0];
             $orderArray['details'] = $orderDetails;
+            $orderArray['shipping'] = $orderShipping[0];
+            $orderArray['billing'] = $orderBilling[0];
+            $orderArray['payment'] = $payment[0];
         }
 
 
