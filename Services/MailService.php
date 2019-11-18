@@ -94,12 +94,16 @@ class MailService implements MailServiceInterface
 
         $mailModel->setAttachments(json_encode($mail->getParts()));
 
-        if (
-            empty($mailModel->getTo()) &&
-            empty($mailModel->getSubject()) &&
-            empty($mailModel->getBody())
-        ) {
-            throw new \Exception('Missing Parameter');
+        if (empty($mailModel->getTo())) {
+            $mailModel->setTo('-');
+        }
+
+        if (empty($mailModel->getSubject())) {
+            $mailModel->setSubject('-');
+        }
+
+        if (empty($mailModel->getBody())) {
+            $mailModel->setBody('-');
         }
 
         $this->modelManager->persist($mailModel);
