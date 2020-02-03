@@ -6,9 +6,9 @@ $(function () {
 })
 
 function registerElements () {
-  $('button').button()
-  $('select').selectmenu()
-  $('input[type="text"]').addClass('ui-widget-content')
+  $('button:not(.no-ui)').button()
+  $('select:not(.no-ui)').selectmenu()
+  $('input[type="text"]:not(.no-ui)').addClass('ui-widget-content')
   $(document).tooltip()
 }
 
@@ -18,6 +18,7 @@ function registerEvents () {
   registerNextMailsButton()
   registerBackButton()
   registerOpenOrderButton()
+  registerOpenCustomerButton()
   registerSendButton()
   registerExecuteSendButton()
   registerCloseAdButton()
@@ -52,13 +53,15 @@ function registerSendMailButton () {
 
 function registerPrevMailsButton () {
   $(plugin_selector + ' #prev-mails-button').on('click', function () {
-    location.href = location.origin + location.pathname + '?offset=' + (offset - limit)
+    var newOffset = parseInt(offset) - parseInt(limit);
+    location.href = location.origin + location.pathname + '?offset=' + newOffset
   })
 }
 
 function registerNextMailsButton () {
   $(plugin_selector + ' #next-mails-button').on('click', function () {
-    location.href = location.origin + location.pathname + '?offset=' + (offset + limit)
+    var newOffset = parseInt(offset) + parseInt(limit);
+    location.href = location.origin + location.pathname + '?offset=' + newOffset
   })
 }
 
@@ -70,8 +73,15 @@ function registerBackButton () {
 
 function registerOpenOrderButton () {
   $(plugin_selector + ' .open-order-link').on('click', function () {
-    orderId = $(this).data('order-id')
+    var orderId = $(this).data('order-id')
     openOrderWindow(orderId)
+  })
+}
+
+function registerOpenCustomerButton () {
+  $(plugin_selector + ' .open-customer-link').on('click', function () {
+    var customerId = $(this).data('customer-id')
+    openCustomerWindow(customerId)
   })
 }
 

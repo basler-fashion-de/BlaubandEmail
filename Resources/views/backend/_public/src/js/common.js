@@ -53,6 +53,16 @@ function openOrderWindow (id) {
   })
 }
 
+function openCustomerWindow (id) {
+  postMessageApi.openModule({
+    name: 'Shopware.apps.Customer',
+    action: 'detail',
+    params: {
+      customerId: id
+    }
+  })
+}
+
 function openModal (selector, buttons) {
   $(selector).dialog({
     resizable: false,

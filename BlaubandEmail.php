@@ -19,6 +19,7 @@ use BlaubandEmail\Installers\Models;
  */
 class BlaubandEmail extends Plugin
 {
+    const PAGE_LIMIT = 20;
 
     /**
      * @param ContainerBuilder $container

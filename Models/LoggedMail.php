@@ -110,7 +110,9 @@ class LoggedMail extends ModelEntity
      */
     public function onPrePersist()
     {
-        $this->createDate = new \DateTime("now");
+        if(empty($this->createDate)){
+            $this->createDate = new \DateTime('now');
+        }
     }
 
     /**
@@ -271,5 +273,13 @@ class LoggedMail extends ModelEntity
     public function getCreateDate()
     {
         return $this->createDate;
+    }
+
+    /**
+     * @param $createDate
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
     }
 }
