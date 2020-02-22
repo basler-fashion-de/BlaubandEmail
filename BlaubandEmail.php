@@ -19,6 +19,7 @@ use BlaubandEmail\Installers\Models;
  */
 class BlaubandEmail extends Plugin
 {
+    const PAGE_LIMIT = 20;
 
     /**
      * @param ContainerBuilder $container
@@ -130,6 +131,10 @@ class BlaubandEmail extends Plugin
             },
 
             '1.2.4' => function() {
+                (new Models($this->container->get('models')))->update();
+            },
+
+            '1.2.6' => function() {
                 (new Models($this->container->get('models')))->update();
             }
         ];

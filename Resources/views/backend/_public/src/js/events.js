@@ -1,31 +1,32 @@
 $(function () {
-  registerEvents()
-  registerElements()
+  registerEvents();
+  registerElements();
 
   showNewsletterPopup()
-})
+});
 
 function registerElements () {
-  $('button').button()
-  $('select').selectmenu()
-  $('input[type="text"]').addClass('ui-widget-content')
-  $(document).tooltip()
+  $('button:not(.no-ui)').button();
+  $('select:not(.no-ui)').selectmenu();
+  $('input[type="text"]:not(.no-ui)').addClass('ui-widget-content');
+  $(document).tooltip();
 }
 
 function registerEvents () {
-  registerSendMailButton()
-  registerPrevMailsButton()
-  registerNextMailsButton()
-  registerBackButton()
-  registerOpenOrderButton()
-  registerSendButton()
-  registerExecuteSendButton()
-  registerCloseAdButton()
-  registerPreviewButton()
-  registerPreviewSendButton()
+  registerSendMailButton();
+  registerPrevMailsButton();
+  registerNextMailsButton();
+  registerBackButton();
+  registerOpenOrderButton();
+  registerOpenCustomerButton();
+  registerSendButton();
+  registerExecuteSendButton();
+  registerCloseAdButton();
+  registerPreviewButton();
+  registerPreviewSendButton();
 
-  registerNewsletterPopupEvents()
-  registerAddAttachment()
+  registerNewsletterPopupEvents();
+  registerAddAttachment();
 }
 
 function showNewsletterPopup () {
@@ -41,7 +42,7 @@ function showNewsletterPopup () {
           height: 300
         }
       )
-  }, 1000)
+  }, 1000);
 }
 
 function registerSendMailButton () {
@@ -52,13 +53,15 @@ function registerSendMailButton () {
 
 function registerPrevMailsButton () {
   $(plugin_selector + ' #prev-mails-button').on('click', function () {
-    location.href = location.origin + location.pathname + '?offset=' + (offset - limit)
+    var newOffset = parseInt(offset) - parseInt(limit);
+    location.href = location.origin + location.pathname + '?offset=' + newOffset
   })
 }
 
 function registerNextMailsButton () {
   $(plugin_selector + ' #next-mails-button').on('click', function () {
-    location.href = location.origin + location.pathname + '?offset=' + (offset + limit)
+    var newOffset = parseInt(offset) + parseInt(limit);
+    location.href = location.origin + location.pathname + '?offset=' + newOffset
   })
 }
 
@@ -70,8 +73,15 @@ function registerBackButton () {
 
 function registerOpenOrderButton () {
   $(plugin_selector + ' .open-order-link').on('click', function () {
-    orderId = $(this).data('order-id')
+    var orderId = $(this).data('order-id');
     openOrderWindow(orderId)
+  })
+}
+
+function registerOpenCustomerButton () {
+  $(plugin_selector + ' .open-customer-link').on('click', function () {
+    var customerId = $(this).data('customer-id');
+    openCustomerWindow(customerId)
   })
 }
 
@@ -83,7 +93,7 @@ function registerSendButton () {
 
 function registerExecuteSendButton () {
   $(plugin_selector + ' #execute-send-button').on('click', function () {
-    var url = $(this).data('url')
+    var url = $(this).data('url');
     var formData = fetchInputFormData();
 
     $.ajax({
@@ -94,7 +104,7 @@ function registerExecuteSendButton () {
       processData: false,
       data: formData,
       xhr: function () {
-        var jqXHR = null
+        var jqXHR = null;
         if (window.ActiveXObject) {
           jqXHR = new window.ActiveXObject('Microsoft.XMLHTTP')
         } else {
@@ -104,11 +114,11 @@ function registerExecuteSendButton () {
         return jqXHR
       },
       complete: function (response) {
-        hideInfoPanel()
-        hideErrorPanel()
+        hideInfoPanel();
+        hideErrorPanel();
 
         if (response.success) {
-          alert(sendSuccessSnippet)
+          alert(sendSuccessSnippet);
           $(plugin_selector + ' #back-button').click()
         } else {
           showErrorPanel(response.message)
@@ -120,16 +130,16 @@ function registerExecuteSendButton () {
 
 function registerAddAttachment () {
   $('#addAttachment').on('click', function () {
-    var $me = $(this)
-    var count = $('#mailContentWrapper').find('input[type="file"]').length + 1
+    var $me = $(this);
+    var count = $('#mailContentWrapper').find('input[type="file"]').length + 1;
     $me.before('<input type="file" name="file_' + count + '" id="file_' + count + '"  class="mail-attachment" accept="image/png, image/gif, image/jpeg, application/pdf"/>')
   })
 }
 
 function registerCloseAdButton () {
   $(plugin_selector + ' .close-ad--button').on('click', function () {
-    var url = $(this).data('url')
-    var me = this
+    var url = $(this).data('url');
+    var me = this;
 
     $.ajax({
       type: 'post',
@@ -151,7 +161,7 @@ function registerPreviewButton () {
 
 function registerPreviewSendButton () {
   $(plugin_selector + ' #preview-send-button').on('click', function () {
-    parent[parent.length-2].document.getElementById('execute-send-button').click()
+    parent[parent.length-2].document.getElementById('execute-send-button').click();
     postMessageApi.window.destroy()
   })
 }
@@ -166,7 +176,7 @@ function registerNewsletterPopupEvents () {
       url: location.href,
       data: {newsletterShowed: 1},
     })
-  })
+  });
 
   $(plugin_selector + ' #close-newsletter-popup-button').on('click', function () {
     postMessageApi.window.destroy()

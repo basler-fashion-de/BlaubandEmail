@@ -1,5 +1,6 @@
 <?php
 
+use BlaubandEmail\BlaubandEmail;
 use BlaubandEmail\Models\LoggedMail;
 use BlaubandEmail\Services\ConfigService;
 use Shopware\Components\CSRFWhitelistAware;
@@ -67,11 +68,8 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $customerId = $this->request->getParam('customerId');
         $orderId = $this->request->getParam('orderId');
 
-        $limit = 20;
-        $offset = empty(
-        $this->request->getParam('offset')) ?
-            0 :
-            $this->request->getParam('offset');
+        $limit = $this->request->getParam('limit', BlaubandEmail::PAGE_LIMIT);
+        $offset = $this->request->getParam('offset', 0);
 
         $repository = $this->modelManager->getRepository(LoggedMail::class);
         $criteria = [];
@@ -86,7 +84,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         }
 
         $allMails = $repository->findBy($criteria, $orderBy, $limit, $offset);
-        $total = $repository->findBy($criteria);
+        $total = count($repository->findBy($criteria));
 
         $authId = $this->auth->getIdentity()->id;
         /** @var User $authModel */

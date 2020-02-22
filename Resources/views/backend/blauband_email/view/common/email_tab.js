@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.BlaubandEmail.view.common.EmailTab', {
       content = swModuleManager.createContentFrame(url, instance, true),
       subApp = null,
       windows = Ext.create('Ext.util.MixedCollection'),
-      contentWindow
+      contentWindow;
 
     contentWindow = Ext.create('Ext.Component', {
       title: label,
@@ -35,21 +35,21 @@ Ext.define('Shopware.apps.BlaubandEmail.view.common.EmailTab', {
       style: 'height: 100%',
       listeners: {
         render: function (component, eOpts) {
-          component.el.appendChild(content)
+          component.el.appendChild(content);
           component.setLoading(true)
         },
       },
-    })
+    });
 
-    content.dom._window = contentWindow
-    windows.add('main', contentWindow)
+    content.dom._window = contentWindow;
+    windows.add('main', contentWindow);
 
     swModuleManager.modules.add(instance, {
       name: url,
       instance: instance,
       subApp: subApp,
       windows: windows
-    })
+    });
 
     return contentWindow
   }

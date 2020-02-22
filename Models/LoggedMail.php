@@ -4,6 +4,7 @@ namespace BlaubandEmail\Models;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Order\Order;
 
 /**
  * @ORM\Entity
@@ -12,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LoggedMail extends ModelEntity
 {
+    const STATE_DONE = 'done';
+    const STATE_TODO = 'todo';
+    const STATE_IN_PROGRESS = 'in_progress';
+
     /**
      * @var integer $id
      *
@@ -71,6 +76,20 @@ class LoggedMail extends ModelEntity
     private $attachments;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_system_mail", type="boolean", nullable=true)
+     */
+    private $isSystemMail = true;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", nullable=true)
+     */
+    private $state = self::STATE_TODO;
+
+    /**
      * @var int
      * @ORM\Column(name="orderID", type="integer", nullable=true)
      */
@@ -80,7 +99,7 @@ class LoggedMail extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      */
     private $order;
 
@@ -94,7 +113,7 @@ class LoggedMail extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="customerID", referencedColumnName="id")
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      */
     private $customer;
 
@@ -110,7 +129,9 @@ class LoggedMail extends ModelEntity
      */
     public function onPrePersist()
     {
-        $this->createDate = new \DateTime("now");
+        if(empty($this->createDate)){
+            $this->createDate = new \DateTime('now');
+        }
     }
 
     /**
@@ -228,13 +249,45 @@ class LoggedMail extends ModelEntity
     /**
      * @param string $attachments
      */
-    public function setAttachments(string $attachments)
+    public function setAttachments($attachments)
     {
         $this->attachments = $attachments;
     }
 
     /**
-     * @return \Shopware\Models\Order\Order
+     * @return bool
+     */
+    public function isSystemMail()
+    {
+        return $this->isSystemMail;
+    }
+
+    /**
+     * @param bool $isSystemMail
+     */
+    public function setIsSystemMail($isSystemMail)
+    {
+        $this->isSystemMail = $isSystemMail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return Order
      */
     public function getOrder()
     {
@@ -242,9 +295,9 @@ class LoggedMail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order $order
      */
-    public function setOrder(\Shopware\Models\Order\Order $order)
+    public function setOrder($order)
     {
         $this->order = $order;
     }
@@ -271,5 +324,13 @@ class LoggedMail extends ModelEntity
     public function getCreateDate()
     {
         return $this->createDate;
+    }
+
+    /**
+     * @param $createDate
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
     }
 }

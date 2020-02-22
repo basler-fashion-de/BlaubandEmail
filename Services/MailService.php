@@ -16,6 +16,8 @@ use Zend_Mime_Part;
 
 class MailService implements MailServiceInterface
 {
+    const EKS_MAIL_FLAG = 'BlaubandEksMail';
+
     /** @var ModelManager */
     private $modelManager;
 
@@ -92,6 +94,10 @@ class MailService implements MailServiceInterface
             $mailModel->setCustomer($this->customer);
         }
 
+        if ($mail->getAssociation(self::EKS_MAIL_FLAG)) {
+            $mailModel->setIsSystemMail(false);
+        }
+
         $mailModel->setAttachments(json_encode($mail->getParts()));
 
         if (
@@ -123,6 +129,7 @@ class MailService implements MailServiceInterface
 
         $mail = $this->templateMail->createMail($mailModel, $context);
         $mail->addTo($to, $to);
+        $mail->setAssociation(self::EKS_MAIL_FLAG); //To define this mail as eks mail and not a system mail
 
         if (!empty($bcc)) {
             $mail->addBcc($bcc);
