@@ -129,7 +129,7 @@ class MailService implements MailServiceInterface
 
         $mail = $this->templateMail->createMail($mailModel, $context);
         $mail->addTo($to, $to);
-        $mail->setAssociation(self::EKS_MAIL_FLAG); //To define this mail as eks mail and not a system mail
+        $mail->setAssociation(self::EKS_MAIL_FLAG, true); //To define this mail as eks mail and not a system mail
 
         if (!empty($bcc)) {
             $mail->addBcc($bcc);
