@@ -63,8 +63,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
 
     public function indexAction()
     {
-        $isOwnFrame = $this->request->getParam('frame') === '1';
-
         $customerId = $this->request->getParam('customerId');
         $orderId = $this->request->getParam('orderId');
 
@@ -99,7 +97,6 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         }
 
         $this->view->assign('customerId', $customerId);
-        $this->view->assign('isOwnFrame', $isOwnFrame);
         $this->view->assign('orderId', $orderId);
         $this->view->assign('mails', $allMails);
         $this->view->assign('offset', $offset);

@@ -6,17 +6,17 @@
             {include file="backend/blauband_common/header.tpl"}
 
             <script>
-              var preselected = {if $isHtml}1{else}0{/if}
-              {literal}
-              $(function () {
-                $('#mailContentWrapper').tabs({
-                  active: preselected,
-                  activate: function( event, ui ) {
-                    $('#selectedTab').val( ui.newPanel.data('type'));
-                  }
-                })
-              })
-              {/literal}
+                var preselected = {if $isHtml}1{else}0{/if}
+                {literal}
+                $(function () {
+                    $('#mailContentWrapper').tabs({
+                        active: preselected,
+                        activate: function (event, ui) {
+                            $('#selectedTab').val(ui.newPanel.data('type'));
+                        }
+                    })
+                });
+                {/literal}
             </script>
 
 
@@ -49,16 +49,25 @@
                 <hr/>
 
                 <div class="button-right-wrapper">
-                    <button id="back-button" data-url="{url action="index" customerId=$customerId orderId=$orderId}">
-                        {s namespace="blauband/mail" name="back"}{/s}
-                    </button>
+                    {block name="mail-send--buttons--back-button"}
+                        original {var_dump($mailId)}
+                        <button id="back-button"
+                                data-url="{url action="index" customerId=$customerId orderId=$orderId}">
+                            {s namespace="blauband/mail" name="back"}{/s}
+                        </button>
+                    {/block}
 
-                    <button id="preview-button" class="blue">
-                        {s namespace="blauband/mail" name="preview"}{/s}
-                    </button>
-                    <button id="execute-send-button" class="blue" data-url="{url action="executeSend"}">
-                        {s namespace="blauband/mail" name="sendMail"}{/s}
-                    </button>
+                    {block name="mail-send--buttons--preview-button"}
+                        <button id="preview-button" class="blue">
+                            {s namespace="blauband/mail" name="preview"}{/s}
+                        </button>
+                    {/block}
+
+                    {block name="mail-send--buttons--send-button"}
+                        <button id="execute-send-button" class="blue" data-url="{url action="executeSend"}">
+                            {s namespace="blauband/mail" name="sendMail"}{/s}
+                        </button>
+                    {/block}
                 </div>
 
                 <div class="cta-row">
@@ -98,10 +107,15 @@
                     <div class="two-cols">
                         {block name="mailContentWrapper"}
                             <div id="mailContentWrapper" class="tabs">
-                                <input type="hidden" id="selectedTab" name="selectedTab" value="{if $isHtml}html{else}plain{/if}">
+                                <input type="hidden" id="selectedTab" name="selectedTab"
+                                       value="{if $isHtml}html{else}plain{/if}">
                                 <ul>
-                                    <li><a href="#plainMainContentWrapper">{s namespace="blauband/mail" name="plainEmail"}{/s}</a></li>
-                                    <li><a href="#htmlMainContentWrapper">{s namespace="blauband/mail" name="htmlEmail"}{/s}</a></li>
+                                    <li>
+                                        <a href="#plainMainContentWrapper">{s namespace="blauband/mail" name="plainEmail"}{/s}</a>
+                                    </li>
+                                    <li>
+                                        <a href="#htmlMainContentWrapper">{s namespace="blauband/mail" name="htmlEmail"}{/s}</a>
+                                    </li>
                                 </ul>
                                 <div data-type="plain" id="plainMainContentWrapper">
                                     <label>{s namespace="blauband/mail" name="mailMessage"}{/s}</label>

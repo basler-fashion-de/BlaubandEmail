@@ -6,19 +6,21 @@
                 {assign 'createDateShort' $mail->getCreateDate()|date_format:"%H:%M:%S"}
             {else}
                 {assign 'createDateShort' $mail->getCreateDate()|date_format:"%e %B %Y"}
-
             {/if}
-            <li>
-                {block name="mail-list--header--link"}
-                    <a href="#mail-{$key}">
-                        {block name="mail-list--header--content"}
-                            <div class="title-from">{$mail->getFrom()|escape}</div>
-                            <div class="title-date">{$createDateShort}</div>
-                            <div class="title-subject">{$mail->getSubject()|iconv_mime_decode}</div>
-                        {/block}
-                    </a>
-                {/block}
-            </li>
+
+            {block name="mail-list--header--list-item"}
+                <li>
+                    {block name="mail-list--header--link"}
+                        <a href="#mail-{$key}">
+                            {block name="mail-list--header--content"}
+                                <div class="title-from">{$mail->getFrom()|escape}</div>
+                                <div class="title-date">{$createDateShort}</div>
+                                <div class="title-subject">{$mail->getSubject()|iconv_mime_decode}</div>
+                            {/block}
+                        </a>
+                    {/block}
+                </li>
+            {/block}
         {/foreach}
     </ul>
 {/block}
@@ -32,43 +34,42 @@
             <div>
                 <div class="mail-attributes">
                     {block name="mail-list--body--attribute"}
-                        <div class="title-date">{$createDate}</div>
-                        <label>{s namespace="blauband/mail" name="mailSubject"}{/s}
-                            :</label>
-                        {$mail->getSubject()|iconv_mime_decode}
+                        {block name="mail-list--body--attribute--date"}
+                            <div class="title-date">{$createDate}</div>
+                        {/block}
+                        {block name="mail-list--body--attribute--subject"}
+                            <label>{s namespace="blauband/mail" name="mailSubject"}{/s}
+                                :</label>
+                            {$mail->getSubject()|iconv_mime_decode}
+                        {/block}
                         <br/>
-                        <label>{s namespace="blauband/mail" name="mailFrom"}{/s}:</label>
-                        {$mail->getFrom()|escape}
+                        {block name="mail-list--body--attribute--from"}
+                            <label>{s namespace="blauband/mail" name="mailFrom"}{/s}:</label>
+                            {$mail->getFrom()|escape}
+                        {/block}
                         <br/>
-                        <label>{s namespace="blauband/mail" name="mailTo"}{/s}:</label>
-                        {$mail->getTo()|escape}
+                        {block name="mail-list--body--attribute--to"}
+                            <label>{s namespace="blauband/mail" name="mailTo"}{/s}:</label>
+                            {$mail->getTo()|escape}
+                        {/block}
                         <br/>
                         {if !empty($mail->getOrder())}
                             {block name="mail-list--body--attribute--order-link"}
                                 <label>{s namespace="blauband/mail" name="orderNumber"}{/s}:</label>
-                                {if $isOwnFrame}
-                                    <a href="#" class="open-order-link"
-                                       data-order-id="{$mail->getOrder()->getId()}">{$mail->getOrder()->getNumber()}</a>
-                                {else}
-                                    {$mail->getOrder()->getNumber()}
-                                {/if}
+                                <a href="#" class="open-order-link"
+                                   data-order-id="{$mail->getOrder()->getId()}">{$mail->getOrder()->getNumber()}</a>
                             {/block}
                             <br/>
                         {/if}
 
                         {if !empty($mail->getCustomer())}
-                            {block name="mail-list--body--attribute--order-link"}
+                            {block name="mail-list--body--attribute--customer-link"}
                                 <label>{s namespace="blauband/mail" name="customer"}{/s}:</label>
-                                {if $isOwnFrame}
                                     <a href="#" class="open-customer-link"
                                        data-customer-id="{$mail->getCustomer()->getId()}">
                                         {$mail->getCustomer()->getFirstname()} {$mail->getCustomer()->getLastname()}
                                         &lt;{$mail->getCustomer()->getEmail()}&gt;
                                     </a>
-                                {else}
-                                    {$mail->getCustomer()->getFirstname()} {$mail->getCustomer()->getLastname()}
-                                    &lt;{$mail->getCustomer()->getEmail()}&gt;
-                                {/if}
                             {/block}
                             <br/>
                         {/if}
