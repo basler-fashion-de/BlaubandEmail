@@ -13,7 +13,7 @@
                     {block name="mail-list--header--link"}
                         <a href="#mail-{$key}">
                             {block name="mail-list--header--content"}
-                                <div class="title-from">{$mail->getFrom()|escape}</div>
+                                <div class="title-from">{$mail->getFrom()|iconv_mime_decode|escape}</div>
                                 <div class="title-date">{$createDateShort}</div>
                                 <div class="title-subject">{$mail->getSubject()|iconv_mime_decode}</div>
                             {/block}
@@ -45,12 +45,12 @@
                         <br/>
                         {block name="mail-list--body--attribute--from"}
                             <label>{s namespace="blauband/mail" name="mailFrom"}{/s}:</label>
-                            {$mail->getFrom()|escape}
+                            {$mail->getFrom()|iconv_mime_decode|escape}
                         {/block}
                         <br/>
                         {block name="mail-list--body--attribute--to"}
                             <label>{s namespace="blauband/mail" name="mailTo"}{/s}:</label>
-                            {$mail->getTo()|escape}
+                            {$mail->getTo()|iconv_mime_decode|escape}
                         {/block}
                         <br/>
                         {if !empty($mail->getOrder())}
