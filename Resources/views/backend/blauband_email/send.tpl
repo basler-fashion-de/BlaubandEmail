@@ -50,7 +50,6 @@
 
                 <div class="button-right-wrapper">
                     {block name="mail-send--buttons--back-button"}
-                        original {var_dump($mailId)}
                         <button id="back-button"
                                 data-url="{url action="index" customerId=$customerId orderId=$orderId}">
                             {s namespace="blauband/mail" name="back"}{/s}
