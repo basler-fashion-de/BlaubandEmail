@@ -58,6 +58,7 @@ class Models
      */
     public function update()
     {
+        $this->modelManager->regenerateProxies();
         $this->tool->updateSchema($this->classes, true);
     }
 }

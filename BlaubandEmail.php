@@ -51,6 +51,13 @@ class BlaubandEmail extends Plugin
         $changeLogService = $this->container->get('blauband_email.services.change_log_service');
         $changeLogService->popUpChangeLogs($context, $context->getCurrentVersion());
 
+        $cacheManager = $this->container->get('shopware.cache_manager');
+        $cacheManager->clearProxyCache();
+
+        return array(
+            'success' => true,
+            'invalidateCache' => array('config', 'backend', 'proxy', 'frontend', 'template', 'snippets')
+        );
     }
 
     /**
@@ -135,6 +142,10 @@ class BlaubandEmail extends Plugin
             },
 
             '1.2.6' => function() {
+                (new Models($this->container->get('models')))->update();
+            },
+
+            '1.2.7' => function() {
                 (new Models($this->container->get('models')))->update();
             }
         ];
