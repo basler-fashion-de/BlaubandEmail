@@ -38,6 +38,7 @@ class MailService implements MailServiceInterface
 
     //If more orders (Batch)
     private $orderCounter = 0;
+    private $shopwareVersion;
 
     /**
      * Mail constructor.
@@ -55,6 +56,7 @@ class MailService implements MailServiceInterface
         $this->frontProxy = $frontProxy;
         $this->templateMail = $templateMail;
 
+        $this->shopwareVersion = Shopware()->Config()->get( 'Version' );
     }
 
     /**
@@ -94,7 +96,10 @@ class MailService implements MailServiceInterface
             $mailModel->setCustomer($this->customer);
         }
 
-        if ($mail->getAssociation(self::EKS_MAIL_FLAG)) {
+        if (
+            version_compare($this->shopwareVersion, '5.6.0', '>=') &&
+            $mail->getAssociation(self::EKS_MAIL_FLAG)
+        ) {
             $mailModel->setIsSystemMail(false);
         }
 
@@ -129,7 +134,10 @@ class MailService implements MailServiceInterface
 
         $mail = $this->templateMail->createMail($mailModel, $context);
         $mail->addTo($to, $to);
-        $mail->setAssociation(self::EKS_MAIL_FLAG, true); //To define this mail as eks mail and not a system mail
+
+        if(version_compare($this->shopwareVersion, '5.6.0', '>=')){
+            $mail->setAssociation(self::EKS_MAIL_FLAG, true); //To define this mail as eks mail and not a system mail
+        }
 
         if (!empty($bcc)) {
             $mail->addBcc($bcc);
