@@ -50,6 +50,8 @@ class Attributes
                 'blauband_email_newsletter',
                 true
             );
+
+            $this->clearCaches();
         }catch (\Exception $e){
             //Es gab Fälle in dem das deinstallieren nicht klappte.
             //In Zukunft haben wir lieber Datenmüll als dass die Deinstallation nicht geht
@@ -76,6 +78,11 @@ class Attributes
             ]
         );
 
+        $this->clearCaches();
+    }
+
+    private function clearCaches()
+    {
         $metaDataCache = $this->modelManager->getConfiguration()->getMetadataCacheImpl();
         $metaDataCache->deleteAll();
         $this->modelManager->generateAttributeModels(['s_core_auth_attributes']);
