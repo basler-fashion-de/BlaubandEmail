@@ -8,6 +8,16 @@
     <license>proprietary</license>
     <link>www.blauband.com</link>
     <author>Blauband GmbH</author>
+    <description lang="de">
+        <![CDATA[
+			Schreiben Sie Emails direkt aus dem Shopware-Backend. Dieses Plugin ist E-Mail-Client und E-Mail-Archiv in einem: alle Emails zur Bestellung finden Sie in den Bestelldetails.
+        ]]>
+    </description>
+    <description lang="en">
+        <![CDATA[
+			Send your emails directly from the Shopware backend. This plugin is email client and email archive in one: all emails concerning an order are shown in the order details.
+        ]]>
+    </description>
 
     <compatibility minVersion="5.2.7" />
 
