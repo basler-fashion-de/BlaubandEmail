@@ -24,8 +24,8 @@
     <!-- Deutscher Changelog immer oben platzieren -->
 
     <changelog version="1.2.9">
-        <changes lang="de">Stabilität verbessert</changes>
-        <changes lang="en">Improve stability</changes>
+        <changes lang="de">Stabilität des Plugins verbessert</changes>
+        <changes lang="en">Improved stability of plugin</changes>
     </changelog>
 
     <changelog version="1.2.8">
