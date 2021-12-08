@@ -5,37 +5,51 @@
 
     <services>
         <!-- SERVICES -->
-        <service class="BlaubandEmail\Services\MailService" id="blauband_email.services.email_service">
+        <service class="BlaubandEmail\Services\MailService"
+                 id="blauband_email.services.email_service"
+                 public="true">
             <argument id="models" type="service"/>
             <argument id="shopware.plugin.cached_config_reader" type="service"/>
             <argument id="front" type="service"/>
-            <argument id="TemplateMail" type="service"/>
+            <argument id="templatemail" type="service"/>
         </service>
 
-        <service class="BlaubandEmail\Services\ChangeLogService" id="blauband_email.services.change_log_service">
+        <service class="BlaubandEmail\Services\ChangeLogService"
+                 id="blauband_email.services.change_log_service"
+                 public="true">
             <argument id="blauband_email.plugin_config_service" type="service"/>
         </service>
 
-        <service class="BlaubandEmail\Services\AdService" id="blauband_email.services.ad_service">
+        <service class="BlaubandEmail\Services\AdService"
+                 id="blauband_email.services.ad_service"
+                 public="true">
         </service>
 
-        <service class="BlaubandEmail\Services\ShopwareStoreService" id="blauband_email.services.shopware_store_service">
+        <service class="BlaubandEmail\Services\ShopwareStoreService"
+                 id="blauband_email.services.shopware_store_service"
+                 public="true">
             <argument id="service_container" type="service"/>
             <argument id="shopware_plugininstaller.plugin_service_view" type="service"/>
         </service>
 
 
         <!-- CONFIGS -->
-        <service class="BlaubandEmail\Services\ConfigService" id="blauband_email.plugin_config_service">
+        <service class="BlaubandEmail\Services\ConfigService"
+                 id="blauband_email.plugin_config_service"
+                 public="true">
             <argument>%blauband_email.plugin_dir%/plugin.xml</argument>
         </service>
 
-        <service class="BlaubandEmail\Subscribers\ExtendCustomer" id="blauband_email.subscribers.extend_customer">
+        <service class="BlaubandEmail\Subscribers\ExtendCustomer"
+                 id="blauband_email.subscribers.extend_customer"
+                 public="true">
             <argument>%blauband_email.plugin_dir%</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service class="BlaubandEmail\Subscribers\Mail" id="blauband_email.subscribers.mail">
+        <service class="BlaubandEmail\Subscribers\Mail"
+                 id="blauband_email.subscribers.mail"
+                 public="true">
             <argument id="blauband_email.services.email_service" type="service"/>
             <tag name="shopware.event_subscriber"/>
         </service>
