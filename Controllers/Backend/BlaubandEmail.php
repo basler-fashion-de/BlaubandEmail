@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_BlaubandEmail extends \Enlight_Controller_Act
         $this->mailService = $this->container->get('blauband_email.services.email_service');
         $this->configReader = $this->container->get('shopware.plugin.cached_config_reader');
         $this->adService = $this->container->get('blauband_email.services.ad_service');
-        $this->templateMail = $this->container->get('TemplateMail');
+        $this->templateMail = $this->container->get('templatemail');
 
         $this->view->assign('adContent', $this->adService->getLatestAdContent());
 
