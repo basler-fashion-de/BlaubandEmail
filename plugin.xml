@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="de">Blauband E-Mails (EKS)</label>
     <label lang="en">Blauband E-Mails (EKS)</label>
-    <version>1.2.9</version>
+    <version>1.3.0</version>
     <copyright>(c) by Blauband GmbH</copyright>
     <license>proprietary</license>
     <link>www.blauband.com</link>
@@ -19,9 +19,14 @@
         ]]>
     </description>
 
-    <compatibility minVersion="5.2.7" />
+    <compatibility minVersion="5.7.6" />
 
     <!-- Deutscher Changelog immer oben platzieren -->
+
+    <changelog version="1.3.0">
+        <changes lang="de">Kompatibilität 5.7.x</changes>
+        <changes lang="en">Compatibility 5.7.x</changes>
+    </changelog>
 
     <changelog version="1.2.9">
         <changes lang="de">Stabilität des Plugins verbessert</changes>

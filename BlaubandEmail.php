@@ -47,9 +47,14 @@ class BlaubandEmail extends Plugin
         $this->setup($context->getCurrentVersion(), $context->getUpdateVersion());
         parent::update($context);
 
-        /** @var ChangeLogService $changeLogService */
-        $changeLogService = $this->container->get('blauband_email.services.change_log_service');
-        $changeLogService->popUpChangeLogs($context, $context->getCurrentVersion());
+        try{
+            /** @var ChangeLogService $changeLogService */
+            $changeLogService = $this->container->get('blauband_email.services.change_log_service');
+            $changeLogService->popUpChangeLogs($context, $context->getCurrentVersion());
+        }catch (\Exception $exception){
+            //Ignore
+            //Es entstehen Fehler, falls das Plugin nicht aktive ist während des Updates.
+        }
 
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearProxyCache();
