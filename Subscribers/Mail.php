@@ -46,7 +46,7 @@ class Mail implements SubscriberInterface
             $this->mailService->saveMail($mail);
 
         } catch (\Exception $e) {
-            Shopware()->Container()->get('pluginlogger')->addInfo('Blauband Mail: ' . $e->getMessage());
+            Shopware()->Container()->get('pluginlogger')->addRecord(200, 'Blauband Mail: ' . $e->getMessage());
         }
     }
 }
