@@ -19,7 +19,7 @@
         ]]>
     </description>
 
-    <compatibility minVersion="5.7.6" />
+    <compatibility minVersion="5.2.7" />
 
     <!-- Deutscher Changelog immer oben platzieren -->
 
